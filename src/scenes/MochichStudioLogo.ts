@@ -27,7 +27,6 @@ export default class MochichStudioLogo extends Phaser.Scene {
 	}
 
 	onCompleteHandler(): void {
-		console.info('onCompleteHandler');
 		this.scene.start(EternalDungeon.name);
 	}
 }
