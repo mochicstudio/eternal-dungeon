@@ -12,7 +12,11 @@ export default class MochichStudioLogo extends Phaser.Scene {
 	}
 
 	create(): void {
-		const logo = this.add.image(400, 180, 'logo');
+		const logo = this.add.image(
+			this.sys.game.canvas.width / 2,
+			180,
+			'logo'
+		);
 
 		this.tweens.add({
 			targets: logo,
