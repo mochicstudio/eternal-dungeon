@@ -4,6 +4,6 @@ import MochichStudioLogo from './scenes/MochichStudioLogo';
 
 new Phaser.Game(
 	Object.assign(config, {
-		scene: [MochichStudioLogo]
+		scene: [MochichStudioLogo.GetInstance()]
 	})
 );
