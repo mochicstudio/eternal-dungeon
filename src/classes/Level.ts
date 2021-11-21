@@ -1,23 +1,25 @@
 import { Tile } from '../enums/Tiles';
 import level from '../interfaces/Level';
+import SpritesLevel from '../interfaces/SpritesLevel';
 
 export default class Level implements level {
-	readonly wall: number;
-	readonly floor: number;
+	readonly sprites: SpritesLevel;
 	readonly config: Phaser.Types.Tilemaps.TilemapConfig;
 	map: Phaser.Tilemaps.Tilemap | undefined;
 	tileset: Phaser.Tilemaps.Tileset | undefined;
 	ground: Phaser.Tilemaps.TilemapLayer | undefined;
 
 	constructor(config: Phaser.Types.Tilemaps.TilemapConfig) {
-		this.wall = Tile.Floor;
-		this.floor = Tile.WallTile;
+		this.sprites = {
+			wall: Tile.WallTile,
+			floor: Tile.Floor
+		};
 		this.config = config;
-		this.SetConfig();
+		this.Remap();
 	}
 
-	private SetConfig() {
-		this.config.data = this.config.data?.map(r => r.map(t => t == 1 ? this.wall : this.floor));
+	private Remap() {
+		this.config.data = this.config.data?.map(r => r.map(t => t == 1 ? this.sprites.wall : this.sprites.floor));
 	}
 
 	private SetTileset() {
