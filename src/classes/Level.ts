@@ -1,6 +1,6 @@
 import { Tile } from '../enums/Tiles';
-import level from '../interfaces/Level';
-import SpritesLevel from '../interfaces/SpritesLevel';
+import level from '../models/level.model';
+import SpritesLevel from '../models/sprites-level.model';
 
 export default class Level implements level {
 	readonly sprites: SpritesLevel;

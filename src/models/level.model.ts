@@ -1,4 +1,4 @@
-import SpritesLevel from './SpritesLevel';
+import SpritesLevel from './sprites-level.model';
 
 export default interface Level {
 	sprites: SpritesLevel;
