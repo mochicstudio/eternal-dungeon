@@ -19,7 +19,7 @@ export default class Level implements level {
 	}
 
 	private Remap() {
-		this.config.data = this.config.data?.map(r => r.map(t => t == 1 ? this.sprites.wall : this.sprites.floor));
+		this.config.data = this.config.data?.map(tileRow => tileRow.map(tile => tile == 1 ? this.sprites.wall : this.sprites.floor));
 	}
 
 	private SetTileset() {
@@ -27,7 +27,7 @@ export default class Level implements level {
 	}
 
 	private SetGround() {
-		this.ground = this.map?.createLayer(0, this.tileset ? this.tileset : '', 0, 0);
+		this.ground = this.map?.createLayer(0, this.tileset ?? '', 0, 0);
 	}
 
 	public SetMap(map: Phaser.Tilemaps.Tilemap) {
