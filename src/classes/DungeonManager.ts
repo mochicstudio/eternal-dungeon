@@ -1,4 +1,4 @@
-import { Tile } from "../enums/Tiles";
+import { Tile } from "../enums/tiles.enum";
 import Level from "./Level";
 
 export default class DungeonManager {

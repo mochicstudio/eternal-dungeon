@@ -1,8 +1,10 @@
+import Entity from '../models/entity.model';
+
 export default class TurnManager {
 	private static instance: TurnManager;
 	private readonly interval: number;
 	private lastCall: number;
-	private entities: Set<any>;
+	private entities: Set<Entity>;
 
 	constructor() {
 		this.interval = 150;
@@ -18,26 +20,34 @@ export default class TurnManager {
 		return this.instance;
 	}
 
-	AddEntity(entity: any) {
+	AddEntity(entity: Entity) {
 		this.entities.add(entity);
 	}
 
-	RemoveEntity(entity: any) {
+	RemoveEntity(entity: Entity) {
 		this.entities.delete(entity);
 	}
 
 	Turn() {
-		let now = Date.now();
-		let limit = this.lastCall + this.interval;
+		const now = Date.now();
+		const limit = this.lastCall + this.interval;
 
 		if (now > limit) {
 			for (let entity of this.entities) {
-				if (!entity.over()) {
-					entity.turn();
+				if (!entity.Over()) {
+					entity.Turn();
 					break;
 				}
 			}
 			this.lastCall = Date.now();
 		}
+	}
+
+	Over(): boolean {
+		return [...this.entities].every((entity) => entity.Over())
+	}
+
+	Refresh() {
+		this.entities.forEach((entity) => entity.Refresh());
 	}
 }

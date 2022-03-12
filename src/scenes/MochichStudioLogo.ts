@@ -16,12 +16,12 @@ export default class MochichStudioLogo extends Phaser.Scene {
 		return this.instance;
 	}
 
-	preload(): void {
+	preload() {
 		this.load.image('logo', 'assets/mochicstudio.png');
 		this.scene.add(EternalDungeon.name, EternalDungeon.GetInstance());
 	}
 
-	create(): void {
+	create() {
 		const logo = this.add.image(
 			this.sys.game.canvas.width / 2,
 			180,
@@ -40,7 +40,7 @@ export default class MochichStudioLogo extends Phaser.Scene {
 		});
 	}
 
-	onCompleteHandler(): void {
+	onCompleteHandler() {
 		this.scene.start(EternalDungeon.name);
 	}
 }

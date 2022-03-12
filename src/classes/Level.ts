@@ -1,4 +1,4 @@
-import { Tile } from '../enums/Tiles';
+import { Tile } from '../enums/tiles.enum';
 import level from '../models/level.model';
 import SpritesLevel from '../models/sprites-level.model';
 
