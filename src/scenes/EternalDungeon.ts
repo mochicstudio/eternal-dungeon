@@ -6,47 +6,47 @@ import Cursors from '../classes/Cursors';
 import Player from '../classes/Player';
 
 export default class EternalDungeon extends Phaser.Scene {
-	private static instance: EternalDungeon;
-	private dungeonManager: DungeonManager;
-	private turnManager: TurnManager;
-	private cursors: Cursors;
+  private static instance: EternalDungeon;
+  private dungeonManager: DungeonManager;
+  private turnManager: TurnManager;
+  private cursors: Cursors;
 
-	private constructor() {
-		super('EternalDungeon');
-		this.dungeonManager = DungeonManager.GetInstance();
-		this.turnManager = TurnManager.GetInstance();
-		this.cursors = Cursors.GetInstance();
-	}
+  private constructor() {
+    super('EternalDungeon');
+    this.dungeonManager = DungeonManager.GetInstance();
+    this.turnManager = TurnManager.GetInstance();
+    this.cursors = Cursors.GetInstance();
+  }
 
-	static GetInstance(): EternalDungeon {
-		if (EternalDungeon.instance) {
-			return this.instance;
-		}
-		this.instance = new EternalDungeon();
-		return this.instance;
-	}
+  static GetInstance(): EternalDungeon {
+    if (EternalDungeon.instance) {
+      return this.instance;
+    }
+    this.instance = new EternalDungeon();
+    return this.instance;
+  }
 
-	preload() {
-		this.load.spritesheet('world', 'assets/world.png', {
-			frameWidth: Tile.Size,
-			frameHeight: Tile.Size,
-			spacing: 1
-		});
-	}
+  preload() {
+    this.load.spritesheet('world', 'assets/world.png', {
+      frameWidth: Tile.Size,
+      frameHeight: Tile.Size,
+      spacing: 1
+    });
+  }
 
-	init() {
-		this.cursors.SetCursorKeys(this.input.keyboard.createCursorKeys());
-	}
+  init() {
+    this.cursors.SetCursorKeys(this.input.keyboard.createCursorKeys());
+  }
 
-	create() {
-		this.dungeonManager.level.SetMap(this.make.tilemap(this.dungeonManager.level.config));
-		this.turnManager.AddEntity(new Player());
-	}
+  create() {
+    this.dungeonManager.level.SetMap(this.make.tilemap(this.dungeonManager.level.config));
+    this.turnManager.AddEntity(new Player());
+  }
 
-	update() {
-		if (this.turnManager.Over()) {
-			this.turnManager.Refresh();
-		}
-		this.turnManager.Turn();
-	}
+  update() {
+    if (this.turnManager.Over()) {
+      this.turnManager.Refresh();
+    }
+    this.turnManager.Turn();
+  }
 }

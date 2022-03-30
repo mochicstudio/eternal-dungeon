@@ -3,36 +3,36 @@ import level from '../models/level.model';
 import SpritesLevel from '../models/sprites-level.model';
 
 export default class Level implements level {
-	readonly sprites: SpritesLevel;
-	readonly config: Phaser.Types.Tilemaps.TilemapConfig;
-	map: Phaser.Tilemaps.Tilemap | undefined;
-	tileset: Phaser.Tilemaps.Tileset | undefined;
-	ground: Phaser.Tilemaps.TilemapLayer | undefined;
+  readonly sprites: SpritesLevel;
+  readonly config: Phaser.Types.Tilemaps.TilemapConfig;
+  map: Phaser.Tilemaps.Tilemap | undefined;
+  tileset: Phaser.Tilemaps.Tileset | undefined;
+  ground: Phaser.Tilemaps.TilemapLayer | undefined;
 
-	constructor(config: Phaser.Types.Tilemaps.TilemapConfig) {
-		this.sprites = {
-			wall: Tile.WallTile,
-			floor: Tile.Floor
-		};
-		this.config = config;
-		this.Remap();
-	}
+  constructor(config: Phaser.Types.Tilemaps.TilemapConfig) {
+    this.sprites = {
+      wall: Tile.WallTile,
+      floor: Tile.Floor
+    };
+    this.config = config;
+    this.Remap();
+  }
 
-	private Remap() {
-		this.config.data = this.config.data?.map(tileRow => tileRow.map(tile => tile == 1 ? this.sprites.wall : this.sprites.floor));
-	}
+  private Remap() {
+    this.config.data = this.config.data?.map(tileRow => tileRow.map(tile => tile == 1 ? this.sprites.wall : this.sprites.floor));
+  }
 
-	private SetTileset() {
-		this.tileset = this.map?.addTilesetImage('tiles', 'world', this.config.tileWidth, this.config.tileHeight, 0, 1);
-	}
+  private SetTileset() {
+    this.tileset = this.map?.addTilesetImage('tiles', 'world', this.config.tileWidth, this.config.tileHeight, 0, 1);
+  }
 
-	private SetGround() {
-		this.ground = this.map?.createLayer(0, this.tileset ?? '', 0, 0);
-	}
+  private SetGround() {
+    this.ground = this.map?.createLayer(0, this.tileset ?? '', 0, 0);
+  }
 
-	public SetMap(map: Phaser.Tilemaps.Tilemap) {
-		this.map = map;
-		this.SetTileset();
-		this.SetGround();
-	}
+  public SetMap(map: Phaser.Tilemaps.Tilemap) {
+    this.map = map;
+    this.SetTileset();
+    this.SetGround();
+  }
 }

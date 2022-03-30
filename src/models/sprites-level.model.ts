@@ -1,4 +1,4 @@
 export default interface SpritesLevel {
-	wall: number;
-	floor: number;
+  wall: number;
+  floor: number;
 }
