@@ -38,7 +38,7 @@ export default class Player extends Entity {
       }
     }
 
-    if (this.dungeonManager.level.map?.getTileAt(this.position.x, this.position.y)?.index === Tile.Wall) {
+    if (this.dungeonManager.level.map?.getTileAt(this.position.x, this.position.y)?.index !== Tile.Floor) {
       this.position = {
         x: previousPosition.x,
         y: previousPosition.y
