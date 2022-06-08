@@ -26,5 +26,8 @@
     "phaser": "^3.55.2",
     "typescript": "^4.6.2",
     "vite": "^2.8.6"
+  },
+  "dependencies": {
+    "pathfinding": "^0.4.18"
   }
 }
