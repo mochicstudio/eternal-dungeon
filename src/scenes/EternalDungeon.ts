@@ -19,10 +19,9 @@ export default class EternalDungeon extends Phaser.Scene {
   }
 
   static GetInstance(): EternalDungeon {
-    if (EternalDungeon.instance) {
-      return this.instance;
+    if (!this.instance) {
+      this.instance = new EternalDungeon();
     }
-    this.instance = new EternalDungeon();
     return this.instance;
   }
 
