@@ -2,14 +2,12 @@ import Entity from '../models/entity.model';
 
 export default class TurnManager {
   private static instance: TurnManager;
-  private readonly interval: number;
-  private lastCall: number;
   private entities: Set<Entity>;
+  private currentEntityIndex: number;
 
   constructor() {
-    this.interval = 150;
-    this.lastCall = Date.now();
     this.entities = new Set();
+    this.currentEntityIndex = 0;
   }
 
   static GetInstance(): TurnManager {
@@ -28,17 +26,15 @@ export default class TurnManager {
   }
 
   Turn() {
-    const now = Date.now();
-    const limit = this.lastCall + this.interval;
+    if (this.entities.size > 0) {
+      const entities = [...this.entities];
+      const entity = entities[this.currentEntityIndex];
 
-    if (now > limit) {
-      for (let entity of this.entities) {
-        if (!entity.Over()) {
-          entity.Turn();
-          break;
-        }
+      if (!entity.Over()) {
+        entity.Turn();
+      } else {
+        this.currentEntityIndex++;
       }
-      this.lastCall = Date.now();
     }
   }
 
