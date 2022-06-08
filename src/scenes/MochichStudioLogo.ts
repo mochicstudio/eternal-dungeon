@@ -9,10 +9,9 @@ export default class MochichStudioLogo extends Phaser.Scene {
   }
 
   static GetInstance(): MochichStudioLogo {
-    if (MochichStudioLogo.instance) {
-      return this.instance;
+    if (!this.instance) {
+      this.instance = new MochichStudioLogo();
     }
-    this.instance = new MochichStudioLogo();
     return this.instance;
   }
 

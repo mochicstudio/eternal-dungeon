@@ -13,10 +13,9 @@ export default class TurnManager {
   }
 
   static GetInstance(): TurnManager {
-    if (TurnManager.instance) {
-      return this.instance;
+    if (!this.instance) {
+      this.instance = new TurnManager();
     }
-    this.instance = new TurnManager();
     return this.instance;
   }
 

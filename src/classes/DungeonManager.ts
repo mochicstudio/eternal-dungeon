@@ -16,10 +16,9 @@ export default class DungeonManager {
   }
 
   static GetInstance(): DungeonManager {
-    if (DungeonManager.instance) {
-      return this.instance;
+    if (!this.instance) {
+      this.instance = new DungeonManager();
     }
-    this.instance = new DungeonManager();
     return this.instance;
   }
 }

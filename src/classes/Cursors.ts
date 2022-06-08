@@ -5,10 +5,9 @@ export default class Cursors {
   constructor() { }
 
   static GetInstance(): Cursors {
-    if (Cursors.instance) {
-      return this.instance;
+    if (!this.instance) {
+      this.instance = new Cursors();
     }
-    this.instance = new Cursors();
     return this.instance;
   }
 
