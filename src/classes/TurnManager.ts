@@ -1,21 +1,8 @@
 import Entity from '../models/entity.model';
 
-export default class TurnManager {
-  private static instance: TurnManager;
-  private entities: Set<Entity>;
-  private currentEntityIndex: number;
-
-  constructor() {
-    this.entities = new Set();
-    this.currentEntityIndex = 0;
-  }
-
-  static GetInstance(): TurnManager {
-    if (!this.instance) {
-      this.instance = new TurnManager();
-    }
-    return this.instance;
-  }
+class TurnManager {
+  private entities: Set<Entity> = new Set();
+  private currentEntityIndex: number = 0;
 
   AddEntity(entity: Entity) {
     this.entities.add(entity);
@@ -46,3 +33,6 @@ export default class TurnManager {
     this.entities.forEach((entity) => entity.Refresh());
   }
 }
+
+const turnManager = new TurnManager();
+export { turnManager };
