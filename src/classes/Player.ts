@@ -47,5 +47,6 @@ export default class Player extends Entity {
 
   Refresh() {
     this.movePoints = this.restorePoints;
+    this.actionPoints = 1;
   }
 }

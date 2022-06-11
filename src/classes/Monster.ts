@@ -4,8 +4,11 @@ import Entity from './Entity';
 import { dungeonManager } from '../classes/DungeonManager';
 
 export default class Monster extends Entity {
+  type: string;
+
   constructor() {
     super(70, 8, 1, 26);
+    this.type = 'Monster';
   }
 
   Turn() {
@@ -25,6 +28,7 @@ export default class Monster extends Entity {
 
   Refresh() {
     this.movePoints = 1;
+    this.actionPoints = 1;
   }
 
   Over() {

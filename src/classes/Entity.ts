@@ -10,6 +10,8 @@ export default class Entity implements entity {
   isMoving: boolean;
   movePoints: number;
   restorePoints: number;
+  actionPoints: number;
+  healthPoints: number;
   sprite: Phaser.GameObjects.Sprite;
 
   constructor(positionX: number, positionY: number, movePoints: number, spriteTile: number) {
@@ -24,6 +26,8 @@ export default class Entity implements entity {
     this.isMoving = false;
     this.movePoints = movePoints;
     this.restorePoints = movePoints;
+    this.actionPoints = 1;
+    this.healthPoints = 1;
     this.sprite = eternalDungeon.add.sprite(this.positionInWorld.x, this.positionInWorld.y, 'world', spriteTile);
     this.sprite.setOrigin(0);
   }
