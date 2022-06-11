@@ -17,19 +17,22 @@ class TurnManager {
       const entities = [...this.entities];
       const entity = entities[this.currentEntityIndex];
 
-      if (!entity.Over()) {
-        entity.Turn();
-      } else {
-        this.currentEntityIndex++;
+      if (entity) {
+        if (!entity.Over()) {
+          entity.Turn();
+        } else {
+          this.currentEntityIndex++;
+        }
       }
     }
   }
 
   Over(): boolean {
-    return [...this.entities].every((entity) => entity.Over())
+    return [...this.entities].every((entity) => entity.Over());
   }
 
   Refresh() {
+    this.currentEntityIndex = 0;
     this.entities.forEach((entity) => entity.Refresh());
   }
 }

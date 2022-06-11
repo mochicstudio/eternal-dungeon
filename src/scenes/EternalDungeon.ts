@@ -1,8 +1,10 @@
 import Phaser from 'phaser';
 import { Tile } from '../enums/tiles.enum';
+import Enemy from '../classes/Monster';
 import { dungeonManager } from '../classes/DungeonManager';
 import { turnManager } from '../classes/TurnManager';
 import { cursors } from '../classes/Cursors';
+import Monster from '../classes/Monster';
 
 class EternalDungeon extends Phaser.Scene {
   constructor() {
@@ -25,6 +27,7 @@ class EternalDungeon extends Phaser.Scene {
     dungeonManager.level.SetMap(this.make.tilemap(dungeonManager.level.config));
     dungeonManager.AddPlayer();
     turnManager.AddEntity(dungeonManager.player);
+    turnManager.AddEntity(new Monster());
   }
 
   update() {

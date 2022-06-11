@@ -1,10 +1,11 @@
 import PF from 'pathfinding';
 import Position from '../models/position.model';
 import Entity from './Entity';
+import { dungeonManager } from '../classes/DungeonManager';
 
 export default class Monster extends Entity {
   constructor() {
-    super(17, 17, 1, 26);
+    super(70, 8, 1, 26);
   }
 
   Turn() {
@@ -31,8 +32,8 @@ export default class Monster extends Entity {
   }
 
   GetPath(position: Position): number[][] | any {
-    // const grid = new PF.Grid(this.dungeonManager1.level.config.data ? this.dungeonManager1.level.config.data : []);
-    // const finder = new PF.AStarFinder();
-    // return finder.findPath(position.x, position.y, this.dungeonManager1.player.position.x, this.dungeonManager1.player.position.y, grid);
+    const grid = new PF.Grid(dungeonManager.level.config.data ? dungeonManager.level.config.data : []);
+    const finder = new PF.AStarFinder();
+    return finder.findPath(position.x, position.y, dungeonManager.player.position.x, dungeonManager.player.position.y, grid);
   }
 }
