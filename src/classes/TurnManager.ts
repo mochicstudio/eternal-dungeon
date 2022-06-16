@@ -12,6 +12,10 @@ class TurnManager {
     this.entities.delete(entity);
   }
 
+  GetEntities() {
+    return this.entities;
+  }
+
   Turn() {
     if (this.entities.size > 0) {
       const entities = [...this.entities];

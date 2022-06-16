@@ -24,6 +24,11 @@ export default class Monster extends Entity {
       }
       this.movePoints -= 1;
     }
+
+    if (this.actionPoints > 0 && this.IsPlayerReachable()) {
+      // dungeonManager.AttackEntity(this, dungeonManager.player);
+      this.actionPoints -= 1;
+    }
   }
 
   Refresh() {
@@ -32,12 +37,25 @@ export default class Monster extends Entity {
   }
 
   Over() {
-    return this.movePoints === 0 && !this.isMoving;
+    return this.movePoints === 0 && this.actionPoints === 0 && !this.isMoving;
+  }
+
+  Attack() {
+    return 1;
+  }
+
+  OnDestroy() {
+    console.log('killed', this);
   }
 
   GetPath(position: Position): number[][] | any {
     const grid = new PF.Grid(dungeonManager.level.config.data ? dungeonManager.level.config.data : []);
     const finder = new PF.AStarFinder();
     return finder.findPath(position.x, position.y, dungeonManager.player.position.x, dungeonManager.player.position.y, grid);
+  }
+
+  IsPlayerReachable(): boolean {
+    // dungeonManager.distanceBetweenEntities(this, dungeonManager.player) <= 2
+    return true;
   }
 }

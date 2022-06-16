@@ -1,6 +1,10 @@
+import PF from 'pathfinding';
 import { Tile } from '../enums/tiles.enum';
 import Player from './Player';
 import Level from './Level';
+import { turnManager } from './TurnManager';
+import Entity from '../models/entity.model';
+import Position from '../models/position.model';
 
 class DungeonManager {
   player: any = null;
@@ -14,6 +18,40 @@ class DungeonManager {
 
   AddPlayer() {
     this.player = new Player();
+  }
+
+  // I think this goes inside player class ???
+  IsWalkableTile(position: Position) {
+    const entities = [...turnManager.GetEntities()];
+    entities.forEach(entity => {
+      if (entity.position.x === position.x && entity.position.y === position.y) {
+        return false;
+      }
+    });
+
+    const tileAtDestination = this.level.map?.getTileAt(position.x, position.y);
+    return tileAtDestination?.index !== Tile.Wall;
+
+  }
+
+  EntityAtTile(position: Position): Entity | null {
+    const entities = [...turnManager.GetEntities()];
+    entities.forEach(entity => {
+      if (entity.position.x === position.x && entity.position.y === position.y) {
+        return entity;
+      }
+    });
+
+    return null;
+  }
+
+  DistanceBetweenEntities(entity1: Entity, entity2: Entity): number {
+    const grid = new PF.Grid(this.level.config.data ? this.level.config.data : []);
+    const finder = new PF.AStarFinder({ diagonalMovement: 1 });
+    const path = finder.findPath(entity1.position.x, entity1.position.y, entity2.position.x, entity2.position.y, grid);
+
+    if (path.length >= 2) return path.length;
+    else return 0;
   }
 }
 
