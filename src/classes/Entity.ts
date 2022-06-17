@@ -32,10 +32,6 @@ export default class Entity implements entity {
     this.sprite.setOrigin(0);
   }
 
-  IsWalkableTile(position: Position): boolean {
-    return dungeonManager.level.config.data ? dungeonManager.level.config.data[position.y][position.x] === Tile.Floor : false;
-  }
-
   MoveEntityTo(position: Position) {
     this.isMoving = true;
     eternalDungeon.tweens.add({
@@ -57,4 +53,6 @@ export default class Entity implements entity {
   Turn() { }
   Over() { }
   Refresh() { }
+  Attack() { }
+  OnDestroy() { }
 }

@@ -1,10 +1,11 @@
 import PF from 'pathfinding';
 import { Tile } from '../enums/tiles.enum';
+import Entity from '../models/entity.model';
+import Position from '../models/position.model';
 import Player from './Player';
 import Level from './Level';
 import { turnManager } from './TurnManager';
-import Entity from '../models/entity.model';
-import Position from '../models/position.model';
+import { eternalDungeon } from '../scenes/EternalDungeon';
 
 class DungeonManager {
   player: any = null;
@@ -20,7 +21,6 @@ class DungeonManager {
     this.player = new Player();
   }
 
-  // I think this goes inside player class ???
   IsWalkableTile(position: Position) {
     const entities = [...turnManager.GetEntities()];
     entities.forEach(entity => {
@@ -31,7 +31,6 @@ class DungeonManager {
 
     const tileAtDestination = this.level.map?.getTileAt(position.x, position.y);
     return tileAtDestination?.index !== Tile.Wall;
-
   }
 
   EntityAtTile(position: Position): Entity | null {
@@ -52,6 +51,32 @@ class DungeonManager {
 
     if (path.length >= 2) return path.length;
     else return 0;
+  }
+
+  AttackEntity(attacker: Entity, victim: Entity) {
+    attacker.isMoving = true;
+    // attacker.tweens = attacker.tweens || 0;
+    // attacker.tweens += 1;
+    eternalDungeon.tweens.add({
+      targets: attacker.sprite,
+      onComplete: () => {
+        attacker.sprite.x = this.level.map?.tileToWorldX(attacker.position.x) as number;
+        attacker.sprite.y = this.level.map?.tileToWorldY(attacker.position.y) as number;
+        // attacker.tweens -= 1;
+
+        const damage = attacker.Attack()
+        victim.healthPoints -= damage;
+
+        if (victim.healthPoints === 0) turnManager.RemoveEntity(victim);
+      },
+      x: this.level.map?.tileToWorldX(victim.position.x),
+      y: this.level.map?.tileToWorldY(victim.position.y),
+      ease: 'Power2',
+      hold: 20,
+      duration: 80,
+      delay: 200,
+      yoyo: true
+    });
   }
 }
 

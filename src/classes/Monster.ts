@@ -26,9 +26,11 @@ export default class Monster extends Entity {
     }
 
     if (this.actionPoints > 0 && this.IsPlayerReachable()) {
-      // dungeonManager.AttackEntity(this, dungeonManager.player);
-      this.actionPoints -= 1;
+      dungeonManager.AttackEntity(this, dungeonManager.player);
+      this.actionPoints = 0;
     }
+
+    this.isMoving = false;
   }
 
   Refresh() {
@@ -37,7 +39,7 @@ export default class Monster extends Entity {
   }
 
   Over() {
-    return this.movePoints === 0 && this.actionPoints === 0 && !this.isMoving;
+    return this.movePoints === 0 && !this.isMoving;
   }
 
   Attack() {
@@ -55,7 +57,6 @@ export default class Monster extends Entity {
   }
 
   IsPlayerReachable(): boolean {
-    // dungeonManager.distanceBetweenEntities(this, dungeonManager.player) <= 2
-    return true;
+    return dungeonManager.DistanceBetweenEntities(this, dungeonManager.player) <= 2
   }
 }

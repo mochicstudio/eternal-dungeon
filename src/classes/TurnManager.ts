@@ -10,6 +10,8 @@ class TurnManager {
 
   RemoveEntity(entity: Entity) {
     this.entities.delete(entity);
+    entity.sprite.destroy();
+    entity.OnDestroy();
   }
 
   GetEntities() {

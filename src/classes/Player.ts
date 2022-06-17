@@ -1,10 +1,13 @@
 import Entity from './Entity';
 import Position from '../models/position.model';
 import { cursors } from './Cursors';
+import { dungeonManager } from './DungeonManager';
 
 export default class Player extends Entity {
   constructor() {
     super(15, 15, 1, 25);
+
+    this.healthPoints = 15;
   }
 
   Turn() {
@@ -34,11 +37,26 @@ export default class Player extends Entity {
 
       if (moved) {
         this.movePoints -= 1;
-        if (this.IsWalkableTile(nextPosition)) {
-          this.MoveEntityTo(nextPosition);
+        if (dungeonManager.IsWalkableTile(nextPosition)) {
+          const enemy = dungeonManager.EntityAtTile(nextPosition);
+
+          if (enemy && this.actionPoints > 0) {
+            dungeonManager.AttackEntity(this, enemy);
+            this.actionPoints -= 1;
+            nextPosition = {
+              x: this.position.x,
+              y: this.position.y
+            };
+          }
         }
+
+        if (this.position.x !== nextPosition.x || this.position.y !== nextPosition.y) this.MoveEntityTo(nextPosition);
       }
+
+      if (this.healthPoints <= 5) this.sprite.tint = Phaser.Display.Color.GetColor(255, 0, 0);
     }
+
+    this.isMoving = false;
   }
 
   Over(): boolean {
@@ -48,5 +66,13 @@ export default class Player extends Entity {
   Refresh() {
     this.movePoints = this.restorePoints;
     this.actionPoints = 1;
+  }
+
+  Attack() {
+    return 1;
+  }
+
+  OnDestroy() {
+    window.location.reload();
   }
 }
