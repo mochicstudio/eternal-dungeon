@@ -7,7 +7,7 @@ export default class Monster extends Entity {
   type: string;
 
   constructor() {
-    super(70, 8, 1, 26);
+    super(70, 8, 1, 317); // 26, 317 - Skeleton
     this.type = 'Monster';
   }
 
