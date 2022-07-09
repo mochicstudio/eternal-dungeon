@@ -30,18 +30,20 @@ class DungeonManager {
     });
 
     const tileAtDestination = this.level.map?.getTileAt(position.x, position.y);
-    return tileAtDestination?.index !== Tile.Wall;
+    return tileAtDestination?.index !== Tile.WallTile;
   }
 
   EntityAtTile(position: Position): Entity | null {
     const entities = [...turnManager.GetEntities()];
+    let entityAtTile = null;
+
     entities.forEach(entity => {
       if (entity.position.x === position.x && entity.position.y === position.y) {
-        return entity;
+        entityAtTile = entity;
       }
     });
 
-    return null;
+    return entityAtTile;
   }
 
   DistanceBetweenEntities(entity1: Entity, entity2: Entity): number {

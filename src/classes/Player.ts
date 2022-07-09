@@ -48,9 +48,9 @@ export default class Player extends Entity {
               y: this.position.y
             };
           }
-        }
 
-        if (this.position.x !== nextPosition.x || this.position.y !== nextPosition.y) this.MoveEntityTo(nextPosition);
+          if (this.position.x !== nextPosition.x || this.position.y !== nextPosition.y) this.MoveEntityTo(nextPosition);
+        }
       }
 
       if (this.healthPoints <= 5) this.sprite.tint = Phaser.Display.Color.GetColor(255, 0, 0);
@@ -73,6 +73,7 @@ export default class Player extends Entity {
   }
 
   OnDestroy() {
+    console.log('you died', this);
     window.location.reload();
   }
 }
