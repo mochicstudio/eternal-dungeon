@@ -28,6 +28,7 @@
     "@types/pathfinding": "0.0.5",
     "jest": "^28.1.2",
     "phaser": "^3.55.2",
+    "ts-jest": "^28.0.5",
     "typescript": "^4.6.2",
     "vite": "^2.8.6"
   },

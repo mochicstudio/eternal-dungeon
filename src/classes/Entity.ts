@@ -1,10 +1,9 @@
-import { Tile } from '../enums/tiles.enum';
-import entity from '../models/entity.model';
+import EntityModel from '../models/entity.model';
 import Position from '../models/position.model';
 import { dungeonManager } from './DungeonManager';
 import { eternalDungeon } from '../scenes/EternalDungeon';
 
-export default class Entity implements entity {
+export default class Entity implements EntityModel {
   position: Position;
   positionInWorld: any;
   isMoving: boolean;
