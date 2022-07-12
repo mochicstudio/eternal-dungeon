@@ -1,7 +1,8 @@
-import Entity from './Entity';
 import Position from '../models/position.model';
+import Entity from './Entity';
 import { cursors } from './Cursors';
 import { dungeonManager } from './DungeonManager';
+import { getRandomNumber } from '../utils/random-number-generator.util';
 
 export default class Player extends Entity {
   constructor() {
@@ -69,7 +70,7 @@ export default class Player extends Entity {
   }
 
   Attack() {
-    return 1;
+    return getRandomNumber(1, 5);
   }
 
   OnDestroy() {

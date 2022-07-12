@@ -66,7 +66,8 @@ class DungeonManager {
         attacker.sprite.y = this.level.map?.tileToWorldY(attacker.position.y) as number;
         // attacker.tweens -= 1;
 
-        const damage = attacker.Attack()
+        const damage = attacker.Attack();
+        console.info(`damage done: ${damage}`);
         victim.healthPoints -= damage;
 
         if (victim.healthPoints === 0) turnManager.RemoveEntity(victim);

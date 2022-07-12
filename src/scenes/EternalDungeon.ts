@@ -1,6 +1,5 @@
 import Phaser from 'phaser';
 import { Tile } from '../enums/tiles.enum';
-import Enemy from '../classes/Monster';
 import { dungeonManager } from '../classes/DungeonManager';
 import { turnManager } from '../classes/TurnManager';
 import { cursors } from '../classes/Cursors';

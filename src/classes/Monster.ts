@@ -1,7 +1,8 @@
 import PF from 'pathfinding';
 import Position from '../models/position.model';
 import Entity from './Entity';
-import { dungeonManager } from '../classes/DungeonManager';
+import { dungeonManager } from './DungeonManager';
+import { getRandomNumber } from '../utils/random-number-generator.util';
 
 export default class Monster extends Entity {
   type: string;
@@ -43,11 +44,11 @@ export default class Monster extends Entity {
   }
 
   Attack() {
-    return 1;
+    return getRandomNumber(1, 3);
   }
 
   OnDestroy() {
-    console.log('killed', this);
+    console.log('monster killed', this);
   }
 
   GetPath(position: Position): number[][] | any {
