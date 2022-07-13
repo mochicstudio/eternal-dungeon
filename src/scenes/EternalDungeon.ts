@@ -3,7 +3,8 @@ import { Tile } from '../enums/tiles.enum';
 import { dungeonManager } from '../classes/DungeonManager';
 import { turnManager } from '../classes/TurnManager';
 import { cursors } from '../classes/Cursors';
-import Monster from '../classes/Monster';
+import Goblin from '../classes/monster/goblin.monster';
+import Skeleton from '../classes/monster/skeleton.monster';
 
 class EternalDungeon extends Phaser.Scene {
   constructor() {
@@ -26,7 +27,8 @@ class EternalDungeon extends Phaser.Scene {
     dungeonManager.level.SetMap(this.make.tilemap(dungeonManager.level.config));
     dungeonManager.AddPlayer();
     turnManager.AddEntity(dungeonManager.player);
-    turnManager.AddEntity(new Monster());
+    turnManager.AddEntity(new Goblin());
+    turnManager.AddEntity(new Skeleton());
   }
 
   update() {

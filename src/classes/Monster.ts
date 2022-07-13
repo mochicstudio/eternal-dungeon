@@ -5,11 +5,8 @@ import { dungeonManager } from './DungeonManager';
 import { getRandomNumber } from '../utils/random-number-generator.util';
 
 export default class Monster extends Entity {
-  type: string;
-
-  constructor() {
-    super(70, 8, 1, 317); // 26, 317 - Skeleton
-    this.type = 'Monster';
+  constructor(position: Position, movePoints: number, tile: number) {
+    super(position.x, position.y, movePoints, tile);
   }
 
   Turn() {
@@ -44,7 +41,7 @@ export default class Monster extends Entity {
   }
 
   Attack() {
-    return getRandomNumber(1, 3);
+    return getRandomNumber(2, 3);
   }
 
   OnDestroy() {

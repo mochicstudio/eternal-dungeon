@@ -1,3 +1,4 @@
+import { Tile } from '../enums/tiles.enum';
 import Position from '../models/position.model';
 import Entity from './Entity';
 import { cursors } from './Cursors';
@@ -5,8 +6,10 @@ import { dungeonManager } from './DungeonManager';
 import { getRandomNumber } from '../utils/random-number-generator.util';
 
 export default class Player extends Entity {
+  type = 'player';
+
   constructor() {
-    super(15, 15, 1, 25);
+    super(15, 15, 1, Tile.PlayerTile);
 
     this.healthPoints = 15;
   }
