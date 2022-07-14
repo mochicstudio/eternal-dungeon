@@ -2,10 +2,10 @@ import PF from 'pathfinding';
 import { Tile } from '../enums/tiles.enum';
 import Entity from '../models/entity.model';
 import Position from '../models/position.model';
-import Player from './Player';
-import Level from './Level';
-import { turnManager } from './TurnManager';
-import { eternalDungeon } from '../scenes/EternalDungeon';
+import Player from './player';
+import Level from './level';
+import { turnManager } from './turn-manager';
+import { eternalDungeon } from '../scenes/eternal-dungeon.scene';
 
 class DungeonManager {
   player: any = null;

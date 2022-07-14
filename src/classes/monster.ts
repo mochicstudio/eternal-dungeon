@@ -1,7 +1,7 @@
 import PF from 'pathfinding';
 import Position from '../models/position.model';
-import Entity from './Entity';
-import { dungeonManager } from './DungeonManager';
+import Entity from './entity';
+import { dungeonManager } from './dungeon-manager';
 import { getRandomNumber } from '../utils/random-number-generator.util';
 
 export default class Monster extends Entity {

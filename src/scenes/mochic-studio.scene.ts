@@ -1,15 +1,12 @@
 import Phaser from 'phaser';
-import { eternalDungeon } from './EternalDungeon';
+import { eternalDungeon } from './eternal-dungeon.scene';
 
-export default class MochichStudioLogo extends Phaser.Scene {
+class MochichStudioLogo extends Phaser.Scene {
   constructor() {
     super('MochichStudioLogo');
   }
 
-  preload() {
-    this.load.image('logo', 'assets/mochicstudio.png');
-    this.scene.add('EternalDungeon', eternalDungeon);
-  }
+  preload() { this.load.image('logo', 'assets/mochicstudio.png'); }
 
   create() {
     const logo = this.add.image(
@@ -30,7 +27,8 @@ export default class MochichStudioLogo extends Phaser.Scene {
     });
   }
 
-  onCompleteHandler() {
-    this.scene.start(eternalDungeon);
-  }
+  onCompleteHandler() { this.scene.start(eternalDungeon); }
 }
+
+const mochicStudioLogo = new MochichStudioLogo();
+export { mochicStudioLogo };

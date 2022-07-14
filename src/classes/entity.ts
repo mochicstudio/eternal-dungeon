@@ -1,7 +1,7 @@
 import EntityModel from '../models/entity.model';
 import Position from '../models/position.model';
-import { dungeonManager } from './DungeonManager';
-import { eternalDungeon } from '../scenes/EternalDungeon';
+import { dungeonManager } from './dungeon-manager';
+import { eternalDungeon } from '../scenes/eternal-dungeon.scene';
 
 export default class Entity implements EntityModel {
   position: Position;

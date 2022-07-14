@@ -1,8 +1,8 @@
 import Phaser from 'phaser';
 import { Tile } from '../enums/tiles.enum';
-import { dungeonManager } from '../classes/DungeonManager';
-import { turnManager } from '../classes/TurnManager';
-import { cursors } from '../classes/Cursors';
+import { dungeonManager } from '../classes/dungeon-manager';
+import { turnManager } from '../classes/turn-manager';
+import { cursors } from '../classes/cursors';
 import Goblin from '../classes/monster/goblin.monster';
 import Skeleton from '../classes/monster/skeleton.monster';
 import Golem from '../classes/monster/golem.monster';

@@ -1,5 +1,5 @@
-import Monster from "../Monster";
-import { dungeonManager } from "../DungeonManager";
+import Monster from "../monster";
+import { dungeonManager } from "../dungeon-manager";
 import Position from "../../models/position.model";
 import { Tile } from "../../enums/tiles.enum";
 import { MonsterType } from "../../enums/monster-type.enum";

@@ -1,8 +1,8 @@
 import { Tile } from '../enums/tiles.enum';
 import Position from '../models/position.model';
-import Entity from './Entity';
-import { cursors } from './Cursors';
-import { dungeonManager } from './DungeonManager';
+import Entity from './entity';
+import { cursors } from './cursors';
+import { dungeonManager } from './dungeon-manager';
 import { getRandomNumber } from '../utils/random-number-generator.util';
 
 export default class Player extends Entity {
