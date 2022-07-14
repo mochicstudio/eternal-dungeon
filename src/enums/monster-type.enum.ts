@@ -1,4 +1,5 @@
 export enum MonsterType {
   goblin = 'goblin',
-  skeleton = 'skeleton'
+  skeleton = 'skeleton',
+  golem = 'golem'
 };

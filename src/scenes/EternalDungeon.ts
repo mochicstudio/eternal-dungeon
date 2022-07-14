@@ -5,6 +5,7 @@ import { turnManager } from '../classes/TurnManager';
 import { cursors } from '../classes/Cursors';
 import Goblin from '../classes/monster/goblin.monster';
 import Skeleton from '../classes/monster/skeleton.monster';
+import Golem from '../classes/monster/golem.monster';
 
 class EternalDungeon extends Phaser.Scene {
   constructor() {
@@ -29,6 +30,7 @@ class EternalDungeon extends Phaser.Scene {
     turnManager.AddEntity(dungeonManager.player);
     turnManager.AddEntity(new Goblin());
     turnManager.AddEntity(new Skeleton());
+    turnManager.AddEntity(new Golem());
   }
 
   update() {
