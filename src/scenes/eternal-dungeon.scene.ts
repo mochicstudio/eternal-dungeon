@@ -31,6 +31,11 @@ class EternalDungeon extends Phaser.Scene {
     turnManager.AddEntity(new Goblin());
     turnManager.AddEntity(new Skeleton());
     turnManager.AddEntity(new Golem());
+
+    const camera = this.cameras.main
+    camera.setViewport(0, 0, camera.worldView.width - 200, camera.worldView.height);
+    camera.setBounds(0, 0, camera.worldView.width, camera.worldView.height);
+    camera.startFollow(dungeonManager.player.sprite);
   }
 
   update() {

@@ -4,9 +4,12 @@ export default {
   type: Phaser.AUTO,
   parent: 'game',
   backgroundColor: '#33A5E7',
-  width: 80 * 16,
-  height: 50 * 16,
-  zoom: 1,
+  scale: {
+    width: 80 * 16,
+    height: 50 * 16,
+    mode: Phaser.Scale.NONE,
+    autoCenter: Phaser.Scale.CENTER_BOTH
+  },
   pixelArt: true,
   physics: {
     default: 'arcade',
