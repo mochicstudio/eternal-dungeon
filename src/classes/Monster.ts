@@ -36,17 +36,9 @@ export default class Monster extends Entity {
     this.actionPoints = 1;
   }
 
-  Over() {
-    return this.movePoints === 0 && !this.isMoving;
-  }
+  Attack() { return getRandomNumber(2, 3); }
 
-  Attack() {
-    return getRandomNumber(2, 3);
-  }
-
-  OnDestroy() {
-    console.log('monster killed', this);
-  }
+  OnDestroy() { console.log('monster killed', this); }
 
   GetPath(position: Position): number[][] | any {
     const grid = new PF.Grid(dungeonManager.level.config.data ? dungeonManager.level.config.data : []);
@@ -54,7 +46,5 @@ export default class Monster extends Entity {
     return finder.findPath(position.x, position.y, dungeonManager.player.position.x, dungeonManager.player.position.y, grid);
   }
 
-  IsPlayerReachable(): boolean {
-    return dungeonManager.DistanceBetweenEntities(this, dungeonManager.player) <= 2
-  }
+  IsPlayerReachable(): boolean { return dungeonManager.DistanceBetweenEntities(this, dungeonManager.player) <= 2; }
 }

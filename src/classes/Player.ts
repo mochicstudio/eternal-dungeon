@@ -10,7 +10,6 @@ export default class Player extends Entity {
 
   constructor() {
     super(15, 15, 1, Tile.PlayerTile);
-
     this.healthPoints = 15;
   }
 
@@ -63,18 +62,12 @@ export default class Player extends Entity {
     this.isMoving = false;
   }
 
-  Over(): boolean {
-    return this.movePoints === 0 && !this.isMoving;
-  }
-
   Refresh() {
     this.movePoints = this.restorePoints;
     this.actionPoints = 1;
   }
 
-  Attack() {
-    return getRandomNumber(1, 5);
-  }
+  Attack() { return getRandomNumber(1, 5); }
 
   OnDestroy() {
     console.log('you died', this);

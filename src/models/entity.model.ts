@@ -13,4 +13,5 @@ export default interface Entity {
   Refresh: Function
   Attack: Function,
   OnDestroy: Function
+  isAlive: Function,
 }

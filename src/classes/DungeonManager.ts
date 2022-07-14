@@ -62,15 +62,17 @@ class DungeonManager {
     eternalDungeon.tweens.add({
       targets: attacker.sprite,
       onComplete: () => {
-        attacker.sprite.x = this.level.map?.tileToWorldX(attacker.position.x) as number;
-        attacker.sprite.y = this.level.map?.tileToWorldY(attacker.position.y) as number;
-        // attacker.tweens -= 1;
+        if (attacker.isAlive() && victim.isAlive()) {
+          attacker.sprite.x = this.level.map?.tileToWorldX(attacker.position.x) as number;
+          attacker.sprite.y = this.level.map?.tileToWorldY(attacker.position.y) as number;
+          // attacker.tweens -= 1;
 
-        const damage = attacker.Attack();
-        console.info(`${attacker.type} damage done: ${damage} to ${victim.type}`);
-        victim.healthPoints -= damage;
+          const damage = attacker.Attack();
+          console.info(`${attacker.type} damage done: ${damage} to ${victim.type}`);
+          victim.healthPoints -= damage;
 
-        if (victim.healthPoints <= 0) turnManager.RemoveEntity(victim);
+          if (!victim.isAlive()) turnManager.RemoveEntity(victim);
+        }
       },
       x: this.level.map?.tileToWorldX(victim.position.x),
       y: this.level.map?.tileToWorldY(victim.position.y),

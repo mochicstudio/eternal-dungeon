@@ -50,8 +50,12 @@ export default class Entity implements EntityModel {
   }
 
   Turn() { }
-  Over() { }
+
+  Over(): boolean { return this.movePoints === 0 && !this.isMoving; }
+
   Refresh() { }
   Attack() { }
   OnDestroy() { }
+
+  isAlive(): boolean { return this.healthPoints > 0; }
 }

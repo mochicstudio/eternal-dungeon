@@ -14,9 +14,7 @@ class TurnManager {
     entity.OnDestroy();
   }
 
-  GetEntities() {
-    return this.entities;
-  }
+  GetEntities() { return this.entities; }
 
   Turn() {
     if (this.entities.size > 0) {
@@ -33,13 +31,11 @@ class TurnManager {
     }
   }
 
-  Over(): boolean {
-    return [...this.entities].every((entity) => entity.Over());
-  }
+  Over(): boolean { return [...this.entities].every((entity) => entity.Over()); }
 
   Refresh() {
     this.currentEntityIndex = 0;
-    this.entities.forEach((entity) => entity.Refresh());
+    this.entities.forEach((entity) => entity.isAlive ? entity.Refresh() : null);
   }
 }
 
