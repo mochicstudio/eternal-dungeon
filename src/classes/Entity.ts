@@ -1,47 +1,39 @@
-import DungeonManager from './DungeonManager';
-import Cursors from './Cursors';
-import entity from '../models/entity.model';
+import EntityModel from '../models/entity.model';
 import Position from '../models/position.model';
-import EternalDungeon from '../scenes/EternalDungeon';
-import { Tile } from '../enums/tiles.enum';
+import { dungeonManager } from './DungeonManager';
+import { eternalDungeon } from '../scenes/EternalDungeon';
 
-export default class Entity implements entity {
-  eternalDungeon: EternalDungeon;
-  dungeonManager: DungeonManager;
-  cursors: Cursors;
+export default class Entity implements EntityModel {
   position: Position;
   positionInWorld: any;
   isMoving: boolean;
   movePoints: number;
   restorePoints: number;
+  actionPoints: number;
+  healthPoints: number;
   sprite: Phaser.GameObjects.Sprite;
 
   constructor(positionX: number, positionY: number, movePoints: number, spriteTile: number) {
-    this.eternalDungeon = EternalDungeon.GetInstance();
-    this.dungeonManager = DungeonManager.GetInstance();
-    this.cursors = Cursors.GetInstance();
     this.position = {
       x: positionX,
       y: positionY
     };
     this.positionInWorld = {
-      x: this.dungeonManager.level.map?.tileToWorldX(positionX) as number,
-      y: this.dungeonManager.level.map?.tileToWorldX(positionY) as number
+      x: dungeonManager.level.map?.tileToWorldX(positionX) as number,
+      y: dungeonManager.level.map?.tileToWorldX(positionY) as number
     };
     this.isMoving = false;
     this.movePoints = movePoints;
     this.restorePoints = movePoints;
-    this.sprite = this.eternalDungeon.add.sprite(this.positionInWorld.x, this.positionInWorld.y, 'world', spriteTile);
+    this.actionPoints = 1;
+    this.healthPoints = 1;
+    this.sprite = eternalDungeon.add.sprite(this.positionInWorld.x, this.positionInWorld.y, 'world', spriteTile);
     this.sprite.setOrigin(0);
-  }
-
-  IsWalkableTile(position: Position): boolean {
-    return this.dungeonManager.level.config.data ? this.dungeonManager.level.config.data[position.y][position.x] === Tile.Floor : false;
   }
 
   MoveEntityTo(position: Position) {
     this.isMoving = true;
-    this.eternalDungeon.tweens.add({
+    eternalDungeon.tweens.add({
       targets: this.sprite,
       onComplete: () => {
         this.isMoving = false;
@@ -50,14 +42,20 @@ export default class Entity implements entity {
           y: position.y
         }
       },
-      x: this.dungeonManager.level.map?.tileToWorldX(position.x),
-      y: this.dungeonManager.level.map?.tileToWorldY(position.y),
+      x: dungeonManager.level.map?.tileToWorldX(position.x),
+      y: dungeonManager.level.map?.tileToWorldY(position.y),
       ease: 'Power2',
       duration: 200
     });
   }
 
   Turn() { }
-  Over() { }
+
+  Over(): boolean { return this.movePoints === 0 && !this.isMoving; }
+
   Refresh() { }
+  Attack() { }
+  OnDestroy() { }
+
+  isAlive(): boolean { return this.healthPoints > 0; }
 }

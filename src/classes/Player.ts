@@ -1,11 +1,16 @@
-import Entity from './Entity';
 import { Tile } from '../enums/tiles.enum';
 import Position from '../models/position.model';
+import Entity from './Entity';
+import { cursors } from './Cursors';
+import { dungeonManager } from './DungeonManager';
+import { getRandomNumber } from '../utils/random-number-generator.util';
 
 export default class Player extends Entity {
+  type = 'player';
 
   constructor() {
-    super(15, 15, 1, 25);
+    super(15, 15, 1, Tile.PlayerTile);
+    this.healthPoints = 15;
   }
 
   Turn() {
@@ -16,37 +21,56 @@ export default class Player extends Entity {
     let moved = false;
 
     if (this.movePoints > 0 && !this.isMoving) {
-      if (this.cursors.cursorKeys?.left.isDown) {
+      if (cursors.cursorKeys?.left.isDown) {
         nextPosition.x -= 1;
         moved = true;
       }
-      if (this.cursors.cursorKeys?.right.isDown) {
+      if (cursors.cursorKeys?.right.isDown) {
         nextPosition.x += 1;
         moved = true;
       }
-      if (this.cursors.cursorKeys?.down.isDown) {
+      if (cursors.cursorKeys?.down.isDown) {
         nextPosition.y += 1;
         moved = true;
       }
-      if (this.cursors.cursorKeys?.up.isDown) {
+      if (cursors.cursorKeys?.up.isDown) {
         nextPosition.y -= 1;
         moved = true;
       }
 
       if (moved) {
         this.movePoints -= 1;
-        if (this.IsWalkableTile(nextPosition)) {
-          this.MoveEntityTo(nextPosition);
+        if (dungeonManager.IsWalkableTile(nextPosition)) {
+          const enemy = dungeonManager.EntityAtTile(nextPosition);
+
+          if (enemy && this.actionPoints > 0) {
+            dungeonManager.AttackEntity(this, enemy);
+            this.actionPoints -= 1;
+            nextPosition = {
+              x: this.position.x,
+              y: this.position.y
+            };
+          }
+
+          if (this.position.x !== nextPosition.x || this.position.y !== nextPosition.y) this.MoveEntityTo(nextPosition);
         }
       }
-    }
-  }
 
-  Over(): boolean {
-    return this.movePoints === 0 && !this.isMoving;
+      if (this.healthPoints <= 5) this.sprite.tint = Phaser.Display.Color.GetColor(255, 0, 0);
+    }
+
+    this.isMoving = false;
   }
 
   Refresh() {
     this.movePoints = this.restorePoints;
+    this.actionPoints = 1;
+  }
+
+  Attack() { return getRandomNumber(1, 5); }
+
+  OnDestroy() {
+    console.log('you died', this);
+    window.location.reload();
   }
 }

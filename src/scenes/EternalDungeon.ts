@@ -1,28 +1,15 @@
 import Phaser from 'phaser';
 import { Tile } from '../enums/tiles.enum';
-import DungeonManager from '../classes/DungeonManager';
-import TurnManager from '../classes/TurnManager';
-import Cursors from '../classes/Cursors';
-import Player from '../classes/Player';
+import { dungeonManager } from '../classes/DungeonManager';
+import { turnManager } from '../classes/TurnManager';
+import { cursors } from '../classes/Cursors';
+import Goblin from '../classes/monster/goblin.monster';
+import Skeleton from '../classes/monster/skeleton.monster';
+import Golem from '../classes/monster/golem.monster';
 
-export default class EternalDungeon extends Phaser.Scene {
-  private static instance: EternalDungeon;
-  private dungeonManager: DungeonManager;
-  private turnManager: TurnManager;
-  private cursors: Cursors;
-
-  private constructor() {
+class EternalDungeon extends Phaser.Scene {
+  constructor() {
     super('EternalDungeon');
-    this.dungeonManager = DungeonManager.GetInstance();
-    this.turnManager = TurnManager.GetInstance();
-    this.cursors = Cursors.GetInstance();
-  }
-
-  static GetInstance(): EternalDungeon {
-    if (!this.instance) {
-      this.instance = new EternalDungeon();
-    }
-    return this.instance;
   }
 
   preload() {
@@ -34,18 +21,25 @@ export default class EternalDungeon extends Phaser.Scene {
   }
 
   init() {
-    this.cursors.SetCursorKeys(this.input.keyboard.createCursorKeys());
+    cursors.SetCursorKeys(this.input.keyboard.createCursorKeys());
   }
 
   create() {
-    this.dungeonManager.level.SetMap(this.make.tilemap(this.dungeonManager.level.config));
-    this.turnManager.AddEntity(new Player());
+    dungeonManager.level.SetMap(this.make.tilemap(dungeonManager.level.config));
+    dungeonManager.AddPlayer();
+    turnManager.AddEntity(dungeonManager.player);
+    turnManager.AddEntity(new Goblin());
+    turnManager.AddEntity(new Skeleton());
+    turnManager.AddEntity(new Golem());
   }
 
   update() {
-    if (this.turnManager.Over()) {
-      this.turnManager.Refresh();
+    if (turnManager.Over()) {
+      turnManager.Refresh();
     }
-    this.turnManager.Turn();
+    turnManager.Turn();
   }
 }
+
+const eternalDungeon = new EternalDungeon();
+export { eternalDungeon };

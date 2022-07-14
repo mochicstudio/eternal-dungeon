@@ -1,21 +1,8 @@
 import Entity from '../models/entity.model';
 
-export default class TurnManager {
-  private static instance: TurnManager;
-  private entities: Set<Entity>;
-  private currentEntityIndex: number;
-
-  constructor() {
-    this.entities = new Set();
-    this.currentEntityIndex = 0;
-  }
-
-  static GetInstance(): TurnManager {
-    if (!this.instance) {
-      this.instance = new TurnManager();
-    }
-    return this.instance;
-  }
+class TurnManager {
+  private entities: Set<Entity> = new Set();
+  private currentEntityIndex: number = 0;
 
   AddEntity(entity: Entity) {
     this.entities.add(entity);
@@ -23,26 +10,34 @@ export default class TurnManager {
 
   RemoveEntity(entity: Entity) {
     this.entities.delete(entity);
+    entity.sprite.destroy();
+    entity.OnDestroy();
   }
+
+  GetEntities() { return this.entities; }
 
   Turn() {
     if (this.entities.size > 0) {
       const entities = [...this.entities];
       const entity = entities[this.currentEntityIndex];
 
-      if (!entity.Over()) {
-        entity.Turn();
-      } else {
-        this.currentEntityIndex++;
+      if (entity) {
+        if (!entity.Over()) {
+          entity.Turn();
+        } else {
+          this.currentEntityIndex++;
+        }
       }
     }
   }
 
-  Over(): boolean {
-    return [...this.entities].every((entity) => entity.Over())
-  }
+  Over(): boolean { return [...this.entities].every((entity) => entity.Over()); }
 
   Refresh() {
-    this.entities.forEach((entity) => entity.Refresh());
+    this.currentEntityIndex = 0;
+    this.entities.forEach((entity) => entity.isAlive ? entity.Refresh() : null);
   }
 }
+
+const turnManager = new TurnManager();
+export { turnManager };
