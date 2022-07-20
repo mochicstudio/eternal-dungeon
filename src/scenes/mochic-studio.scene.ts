@@ -6,7 +6,10 @@ class MochichStudioLogo extends Phaser.Scene {
     super('MochichStudioLogo');
   }
 
-  preload() { this.load.image('logo', 'assets/mochicstudio.png'); }
+  preload() {
+    setBootingBackground();
+    this.load.image('logo', 'assets/mochicstudio.png');
+  }
 
   create() {
     const logo = this.add.image(
@@ -29,6 +32,8 @@ class MochichStudioLogo extends Phaser.Scene {
 
   onCompleteHandler() { this.scene.start(eternalDungeon); }
 }
+
+const setBootingBackground = () => { document.getElementById('html')?.classList.add('booting-screen'); }
 
 const mochicStudioLogo = new MochichStudioLogo();
 export { mochicStudioLogo };

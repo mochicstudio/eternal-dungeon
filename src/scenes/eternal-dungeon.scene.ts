@@ -13,6 +13,7 @@ class EternalDungeon extends Phaser.Scene {
   }
 
   preload() {
+    setInGameBackground();
     this.load.spritesheet('world', 'assets/world.png', {
       frameWidth: Tile.Size,
       frameHeight: Tile.Size,
@@ -44,6 +45,11 @@ class EternalDungeon extends Phaser.Scene {
     }
     turnManager.Turn();
   }
+}
+
+const setInGameBackground = () => {
+  document.getElementById('html')?.classList.remove('booting-screen');
+  document.getElementById('html')?.classList.add('in-game-screen');
 }
 
 const eternalDungeon = new EternalDungeon();
