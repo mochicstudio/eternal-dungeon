@@ -9,42 +9,42 @@ export default class Monster extends Entity {
     super(position.x, position.y, movePoints, tile);
   }
 
-  Turn() {
+  turn() {
     let previousPosition: Position = {
       x: this.position.x,
       y: this.position.y
     };
 
     if (this.movePoints > 0) {
-      const path = this.GetPath(previousPosition);
+      const path = this.getPath(previousPosition);
       if (path.length > 2) {
-        this.MoveEntityTo({ x: path[1][0], y: path[1][1] });
+        this.moveEntityTo({ x: path[1][0], y: path[1][1] });
       }
       this.movePoints -= 1;
     }
 
-    if (this.actionPoints > 0 && this.IsPlayerReachable()) {
-      dungeonManager.AttackEntity(this, dungeonManager.player);
+    if (this.actionPoints > 0 && this.isPlayerReachable()) {
+      dungeonManager.attackEntity(this, dungeonManager.player);
       this.actionPoints = 0;
     }
 
     this.isMoving = false;
   }
 
-  Refresh() {
+  refresh() {
     this.movePoints = 1;
     this.actionPoints = 1;
   }
 
-  Attack() { return getRandomNumber(2, 3); }
+  attack() { return getRandomNumber(2, 3); }
 
-  OnDestroy() { console.log('monster killed', this); }
+  onDestroy() { console.log('monster killed', this); }
 
-  GetPath(position: Position): number[][] | any {
+  getPath(position: Position): number[][] | any {
     const grid = new PF.Grid(dungeonManager.level.config.data ? dungeonManager.level.config.data : []);
     const finder = new PF.AStarFinder();
     return finder.findPath(position.x, position.y, dungeonManager.player.position.x, dungeonManager.player.position.y, grid);
   }
 
-  IsPlayerReachable(): boolean { return dungeonManager.DistanceBetweenEntities(this, dungeonManager.player) <= 2; }
+  isPlayerReachable(): boolean { return dungeonManager.distanceBetweenEntities(this, dungeonManager.player) <= 2; }
 }

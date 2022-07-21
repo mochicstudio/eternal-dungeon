@@ -31,7 +31,7 @@ export default class Entity implements EntityModel {
     this.sprite.setOrigin(0);
   }
 
-  MoveEntityTo(position: Position) {
+  moveEntityTo(position: Position) {
     this.isMoving = true;
     eternalDungeon.tweens.add({
       targets: this.sprite,
@@ -49,13 +49,13 @@ export default class Entity implements EntityModel {
     });
   }
 
-  Turn() { }
+  turn() { }
 
-  Over(): boolean { return this.movePoints === 0 && !this.isMoving; }
+  over(): boolean { return this.movePoints === 0 && !this.isMoving; }
 
-  Refresh() { }
-  Attack() { }
-  OnDestroy() { }
+  refresh() { }
+  attack() { }
+  onDestroy() { }
 
   isAlive(): boolean { return this.healthPoints > 0; }
 }

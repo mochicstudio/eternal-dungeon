@@ -6,7 +6,7 @@ export default class Goblin extends Monster {
   type: MonsterType;
 
   constructor() {
-    super({ x: 70, y: 8 }, 1, Tile.MonsterGoblinTile);
+    super({ x: 70, y: 8 }, 1, Tile.monsterGoblinTile);
     this.type = MonsterType.goblin;
   }
 }

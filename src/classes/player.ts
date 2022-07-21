@@ -9,11 +9,11 @@ export default class Player extends Entity {
   type = 'player';
 
   constructor() {
-    super(15, 15, 1, Tile.PlayerTile);
+    super(15, 15, 1, Tile.playerTile);
     this.healthPoints = 15;
   }
 
-  Turn() {
+  turn() {
     let nextPosition: Position = {
       x: this.position.x,
       y: this.position.y
@@ -40,11 +40,11 @@ export default class Player extends Entity {
 
       if (moved) {
         this.movePoints -= 1;
-        if (dungeonManager.IsWalkableTile(nextPosition)) {
-          const enemy = dungeonManager.EntityAtTile(nextPosition);
+        if (dungeonManager.isWalkableTile(nextPosition)) {
+          const enemy = dungeonManager.entityAtTile(nextPosition);
 
           if (enemy && this.actionPoints > 0) {
-            dungeonManager.AttackEntity(this, enemy);
+            dungeonManager.attackEntity(this, enemy);
             this.actionPoints -= 1;
             nextPosition = {
               x: this.position.x,
@@ -52,7 +52,7 @@ export default class Player extends Entity {
             };
           }
 
-          if (this.position.x !== nextPosition.x || this.position.y !== nextPosition.y) this.MoveEntityTo(nextPosition);
+          if (this.position.x !== nextPosition.x || this.position.y !== nextPosition.y) this.moveEntityTo(nextPosition);
         }
       }
 
@@ -62,14 +62,14 @@ export default class Player extends Entity {
     this.isMoving = false;
   }
 
-  Refresh() {
+  refresh() {
     this.movePoints = this.restorePoints;
     this.actionPoints = 1;
   }
 
-  Attack() { return getRandomNumber(1, 5); }
+  attack() { return getRandomNumber(1, 5); }
 
-  OnDestroy() {
+  onDestroy() {
     console.log('you died', this);
     window.location.reload();
   }

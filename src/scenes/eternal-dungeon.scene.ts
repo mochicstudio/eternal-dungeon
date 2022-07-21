@@ -15,35 +15,37 @@ class EternalDungeon extends Phaser.Scene {
   preload() {
     setInGameBackground();
     this.load.spritesheet('world', 'assets/world.png', {
-      frameWidth: Tile.Size,
-      frameHeight: Tile.Size,
+      frameWidth: Tile.size,
+      frameHeight: Tile.size,
       spacing: 1
     });
   }
 
   init() {
-    cursors.SetCursorKeys(this.input.keyboard.createCursorKeys());
+    cursors.setCursorKeys(this.input.keyboard.createCursorKeys());
   }
 
   create() {
-    dungeonManager.level.SetMap(this.make.tilemap(dungeonManager.level.config));
-    dungeonManager.AddPlayer();
-    turnManager.AddEntity(dungeonManager.player);
-    turnManager.AddEntity(new Goblin());
-    turnManager.AddEntity(new Skeleton());
-    turnManager.AddEntity(new Golem());
+    dungeonManager.level.setMap(this.make.tilemap(dungeonManager.level.config));
+    dungeonManager.addPlayer();
+    turnManager.addEntity(dungeonManager.player);
+    turnManager.addEntity(new Goblin());
+    turnManager.addEntity(new Skeleton());
+    turnManager.addEntity(new Golem());
 
     const camera = this.cameras.main
     camera.setViewport(0, 0, camera.worldView.width - 200, camera.worldView.height);
     camera.setBounds(0, 0, camera.worldView.width, camera.worldView.height);
     camera.startFollow(dungeonManager.player.sprite);
+
+    this.events.emit('renderUI');
   }
 
   update() {
-    if (turnManager.Over()) {
-      turnManager.Refresh();
+    if (turnManager.over()) {
+      turnManager.refresh();
     }
-    turnManager.Turn();
+    turnManager.turn();
   }
 }
 

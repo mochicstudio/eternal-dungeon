@@ -11,28 +11,28 @@ export default class Level implements level {
 
   constructor(config: Phaser.Types.Tilemaps.TilemapConfig) {
     this.sprites = {
-      wall: Tile.WallTile,
-      floor: Tile.Floor
+      wall: Tile.wallTile,
+      floor: Tile.floor
     };
     this.config = config;
-    this.Remap();
+    this.remap();
   }
 
-  private Remap() {
+  private remap() {
     this.config.data = this.config.data?.map(tileRow => tileRow.map(tile => tile == 1 ? this.sprites.wall : this.sprites.floor));
   }
 
-  private SetTileset() {
+  private setTileset() {
     this.tileset = this.map?.addTilesetImage('tiles', 'world', this.config.tileWidth, this.config.tileHeight, 0, 1);
   }
 
-  private SetGround() {
+  private setGround() {
     this.ground = this.map?.createLayer(0, this.tileset ?? '', 0, 0);
   }
 
-  public SetMap(map: Phaser.Tilemaps.Tilemap) {
+  public setMap(map: Phaser.Tilemaps.Tilemap) {
     this.map = map;
-    this.SetTileset();
-    this.SetGround();
+    this.setTileset();
+    this.setGround();
   }
 }

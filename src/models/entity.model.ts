@@ -8,10 +8,10 @@ export default interface Entity {
   type?: string,
   sprite: Phaser.GameObjects.Sprite,
   tweens?: any,
-  Turn: Function,
-  Over: Function,
-  Refresh: Function
-  Attack: Function,
-  OnDestroy: Function
+  turn: Function,
+  over: Function,
+  refresh: Function
+  attack: Function,
+  onDestroy: Function
   isAlive: Function,
 }
