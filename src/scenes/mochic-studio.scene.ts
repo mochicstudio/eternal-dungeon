@@ -9,6 +9,7 @@ class MochichStudioLogo extends Phaser.Scene {
   preload() {
     setBootingBackground();
     this.load.image('logo', 'assets/mochicstudio.png');
+    this.scene.add('EternalDungeon', eternalDungeon);
   }
 
   create() {

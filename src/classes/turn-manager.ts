@@ -15,6 +15,7 @@ class TurnManager {
   }
 
   getEntities() { return this.entities; }
+  getEntitiesValues() { return this.entities.values(); }
 
   turn() {
     if (this.entities.size > 0) {

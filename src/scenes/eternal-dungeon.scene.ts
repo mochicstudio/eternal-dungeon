@@ -6,6 +6,7 @@ import { cursors } from '../classes/cursors';
 import Goblin from '../classes/monster/goblin.monster';
 import Skeleton from '../classes/monster/skeleton.monster';
 import Golem from '../classes/monster/golem.monster';
+import { ui } from './ui.scene';
 
 class EternalDungeon extends Phaser.Scene {
   constructor() {
@@ -19,6 +20,7 @@ class EternalDungeon extends Phaser.Scene {
       frameHeight: Tile.size,
       spacing: 1
     });
+    this.scene.add('UI', ui, true);
   }
 
   init() {

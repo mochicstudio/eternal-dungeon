@@ -11,6 +11,7 @@ export default class Entity implements EntityModel {
   restorePoints: number;
   actionPoints: number;
   healthPoints: number;
+  spriteTile: number;
   sprite: Phaser.GameObjects.Sprite;
 
   constructor(positionX: number, positionY: number, movePoints: number, spriteTile: number) {
@@ -27,7 +28,8 @@ export default class Entity implements EntityModel {
     this.restorePoints = movePoints;
     this.actionPoints = 1;
     this.healthPoints = 1;
-    this.sprite = eternalDungeon.add.sprite(this.positionInWorld.x, this.positionInWorld.y, 'world', spriteTile);
+    this.spriteTile = spriteTile;
+    this.sprite = eternalDungeon.add.sprite(this.positionInWorld.x, this.positionInWorld.y, 'world', this.spriteTile);
     this.sprite.setOrigin(0);
   }
 
@@ -58,4 +60,5 @@ export default class Entity implements EntityModel {
   onDestroy() { }
 
   isAlive(): boolean { return this.healthPoints > 0; }
+  renderUI(position: Position, width?: number) { return 0; }
 }

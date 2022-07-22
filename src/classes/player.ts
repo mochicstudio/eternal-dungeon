@@ -70,7 +70,10 @@ export default class Player extends Entity {
   attack() { return getRandomNumber(1, 5); }
 
   onDestroy() {
-    console.log('you died', this);
-    window.location.reload();
+    dungeonManager.log('you died');
+
+    if (window.confirm('Do want to play again?')) {
+      window.location.reload();
+    }
   }
 }

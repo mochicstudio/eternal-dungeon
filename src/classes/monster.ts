@@ -1,10 +1,14 @@
 import PF from 'pathfinding';
-import Position from '../models/position.model';
+import { ui } from '../scenes/ui.scene';
 import Entity from './entity';
 import { dungeonManager } from './dungeon-manager';
+import Position from '../models/position.model';
 import { getRandomNumber } from '../utils/random-number-generator.util';
 
 export default class Monster extends Entity {
+  private UIsprite: any;
+  private UItext: any;
+
   constructor(position: Position, movePoints: number, tile: number) {
     super(position.x, position.y, movePoints, tile);
   }
@@ -31,6 +35,18 @@ export default class Monster extends Entity {
     this.isMoving = false;
   }
 
+  over() {
+    const isOver = this.movePoints === 0 && !this.isMoving;
+
+    if (isOver && this.UItext) {
+      this.UItext.setColor('#CFC6B8');
+    } else {
+      this.UItext.setColor('#FFF');
+    }
+
+    return isOver;
+  }
+
   refresh() {
     this.movePoints = 1;
     this.actionPoints = 1;
@@ -38,7 +54,11 @@ export default class Monster extends Entity {
 
   attack() { return getRandomNumber(2, 3); }
 
-  onDestroy() { console.log('monster killed', this); }
+  onDestroy() {
+    dungeonManager.log('monster killed');
+    this.UIsprite.setAlpha(0.2);
+    this.UItext.setAlpha(0.2);
+  }
 
   getPath(position: Position): number[][] | any {
     const grid = new PF.Grid(dungeonManager.level.config.data ? dungeonManager.level.config.data : []);
@@ -47,4 +67,10 @@ export default class Monster extends Entity {
   }
 
   isPlayerReachable(): boolean { return dungeonManager.distanceBetweenEntities(this, dungeonManager.player) <= 2; }
+
+  renderUI(position: Position): number {
+    this.UIsprite = ui.add.sprite(position.x + 5, position.y, 'world', this.spriteTile);
+    this.UItext = ui.add.text(position.x + 20, position.y - 7, 'entity', { font: '14px Arial', color: '#CFC6B8' });
+    return 30;
+  }
 }

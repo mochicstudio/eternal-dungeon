@@ -6,12 +6,14 @@ export default interface Entity {
   actionPoints: number,
   healthPoints: number,
   type?: string,
+  spriteTile: number,
   sprite: Phaser.GameObjects.Sprite,
   tweens?: any,
   turn: Function,
   over: Function,
   refresh: Function
   attack: Function,
-  onDestroy: Function
+  onDestroy: Function,
   isAlive: Function,
+  renderUI: Function
 }
