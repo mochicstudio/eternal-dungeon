@@ -6,9 +6,6 @@ import Position from '../models/position.model';
 import { getRandomNumber } from '../utils/random-number-generator.util';
 
 export default class Monster extends Entity {
-  private UIsprite: any;
-  private UItext: any;
-
   constructor(position: Position, movePoints: number, tile: number) {
     super(position.x, position.y, movePoints, tile);
   }
@@ -38,10 +35,10 @@ export default class Monster extends Entity {
   over() {
     const isOver = this.movePoints === 0 && !this.isMoving;
 
-    if (isOver && this.UItext) {
-      this.UItext.setColor('#CFC6B8');
+    if (isOver && this.uiText) {
+      this.uiText.setColor('#CFC6B8');
     } else {
-      this.UItext.setColor('#FFF');
+      this.uiText.setColor('#FFF');
     }
 
     return isOver;
@@ -56,8 +53,8 @@ export default class Monster extends Entity {
 
   onDestroy() {
     dungeonManager.log('monster killed');
-    this.UIsprite.setAlpha(0.2);
-    this.UItext.setAlpha(0.2);
+    this.uiSprite.setAlpha(0.2);
+    this.uiText.setAlpha(0.2);
   }
 
   getPath(position: Position): number[][] | any {
@@ -69,8 +66,8 @@ export default class Monster extends Entity {
   isPlayerReachable(): boolean { return dungeonManager.distanceBetweenEntities(this, dungeonManager.player) <= 2; }
 
   renderUI(position: Position): number {
-    this.UIsprite = ui.add.sprite(position.x + 5, position.y, 'world', this.spriteTile);
-    this.UItext = ui.add.text(position.x + 20, position.y - 7, 'entity', { font: '14px Arial', color: '#CFC6B8' });
+    this.uiSprite = ui.add.sprite(position.x + 5, position.y, 'world', this.spriteTile);
+    this.uiText = ui.add.text(position.x + 20, position.y - 7, 'entity', { font: '14px Arial', color: '#CFC6B8' });
     return 30;
   }
 }

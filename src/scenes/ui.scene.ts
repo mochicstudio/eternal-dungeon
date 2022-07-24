@@ -6,7 +6,7 @@ import Position from '../models/position.model';
 
 class UI extends Phaser.Scene {
   private created: boolean;
-  private log: Phaser.GameObjects.Text | undefined;
+  private log!: Phaser.GameObjects.Text;
 
   constructor() {
     super('UI');
@@ -30,7 +30,7 @@ class UI extends Phaser.Scene {
       }
     }
 
-    this.add.line(position.x + 5, position.y, 0, 10, 175, 10, 0xcfc6b8).setOrigin(0);
+    this.add.line(position.x + 5, position.y - 20, 0, 10, 175, 10, 0xcfc6b8).setOrigin(0);
     this.log = this.add.text(position.x + 10, position.y + 20, '', {
       font: '12px Arial',
       color: '#CFC6B8',

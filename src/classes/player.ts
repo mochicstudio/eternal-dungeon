@@ -4,9 +4,12 @@ import Entity from './entity';
 import { cursors } from './cursors';
 import { dungeonManager } from './dungeon-manager';
 import { getRandomNumber } from '../utils/random-number-generator.util';
+import { ui } from '../scenes/ui.scene';
 
 export default class Player extends Entity {
   type = 'player';
+  uiStatsText!: Phaser.GameObjects.Text;
+  uiItems!: Array<Phaser.GameObjects.Rectangle>;
 
   constructor() {
     super(15, 15, 1, Tile.playerTile);
@@ -62,6 +65,22 @@ export default class Player extends Entity {
     this.isMoving = false;
   }
 
+  over(): boolean {
+    let isOver = this.movePoints === 0 && !this.isMoving;
+
+    if (isOver && this.uiText) {
+      this.uiText.setColor('#CFC6B8');
+    } else {
+      this.uiText.setColor('#FFF');
+    }
+
+    if (this.uiStatsText) {
+      this.uiStatsText.setText(`HP: ${this.healthPoints}\nMP: ${this.movePoints}\nAP: ${this.actionPoints}`);
+    }
+
+    return isOver;
+  }
+
   refresh() {
     this.movePoints = this.restorePoints;
     this.actionPoints = 1;
@@ -74,6 +93,37 @@ export default class Player extends Entity {
 
     if (window.confirm('Do want to play again?')) {
       window.location.reload();
+    }
+  }
+
+  renderUI(position: Position, width?: number): number {
+    let accumulatedHeight = 0;
+
+    this.uiSprite = ui.add.sprite(position.x, position.y, 'world', this.spriteTile).setOrigin(0);
+    this.uiText = ui.add.text(position.x + 20, position.y, this.type, { font: '16px Arial', color: '#CFC6B8' });
+    this.uiStatsText = ui.add.text(position.x + 20, position.y + 20, `HP: ${this.healthPoints}\nMP: ${this.movePoints}\nAP: ${this.actionPoints}`, { font: '12px Arial', color: '#CFC6B8' });
+
+    accumulatedHeight += this.uiStatsText.height + this.uiSprite.height + 90;
+
+    this.renderItemSlots(position);
+
+    ui.add.line(position.x + 5, position.y + 120, 0, 10, 175, 10, 0xcfc6b8).setOrigin(0);
+
+    return accumulatedHeight;
+  }
+
+  renderItemSlots(position: Position) {
+    let itemsPerRow = 5
+    let rows = 2
+    this.uiItems = []
+    for (let row = 1; row <= rows; row++) {
+      for (let cell = 1; cell <= itemsPerRow; cell++) {
+        let rx = position.x + (25 * cell)
+        let ry = position.y + 50 + (25 * row)
+        this.uiItems.push(
+          ui.add.rectangle(rx, ry, 20, 20, 0xcfc6b8, 0.3).setOrigin(0)
+        );
+      }
     }
   }
 }

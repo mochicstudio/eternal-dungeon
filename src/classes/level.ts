@@ -5,9 +5,9 @@ import SpritesLevel from '../models/sprites-level.model';
 export default class Level implements level {
   readonly sprites: SpritesLevel;
   readonly config: Phaser.Types.Tilemaps.TilemapConfig;
-  map: Phaser.Tilemaps.Tilemap | undefined;
-  tileset: Phaser.Tilemaps.Tileset | undefined;
-  ground: Phaser.Tilemaps.TilemapLayer | undefined;
+  map!: Phaser.Tilemaps.Tilemap;
+  tileset!: Phaser.Tilemaps.Tileset;
+  ground!: Phaser.Tilemaps.TilemapLayer;
 
   constructor(config: Phaser.Types.Tilemaps.TilemapConfig) {
     this.sprites = {

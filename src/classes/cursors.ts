@@ -1,5 +1,5 @@
 class Cursors {
-  cursorKeys: Phaser.Types.Input.Keyboard.CursorKeys | undefined;
+  cursorKeys!: Phaser.Types.Input.Keyboard.CursorKeys;
 
   setCursorKeys(cursorKeys: Phaser.Types.Input.Keyboard.CursorKeys) {
     this.cursorKeys = cursorKeys;

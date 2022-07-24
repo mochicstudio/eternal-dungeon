@@ -5,7 +5,7 @@ import { eternalDungeon } from '../scenes/eternal-dungeon.scene';
 
 export default class Entity implements EntityModel {
   position: Position;
-  positionInWorld: any;
+  positionInWorld: Position;
   isMoving: boolean;
   movePoints: number;
   restorePoints: number;
@@ -13,6 +13,8 @@ export default class Entity implements EntityModel {
   healthPoints: number;
   spriteTile: number;
   sprite: Phaser.GameObjects.Sprite;
+  uiSprite!: Phaser.GameObjects.Sprite;
+  uiText!: Phaser.GameObjects.Text;
 
   constructor(positionX: number, positionY: number, movePoints: number, spriteTile: number) {
     this.position = {
