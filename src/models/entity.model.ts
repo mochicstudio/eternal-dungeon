@@ -1,3 +1,5 @@
+import Item from '../classes/items/item';
+
 export default interface Entity {
   position: { x: number, y: number },
   isMoving: boolean;
@@ -6,6 +8,7 @@ export default interface Entity {
   actionPoints: number,
   healthPoints: number,
   type?: string,
+  items?: Array<Item>,
   spriteTile: number,
   sprite: Phaser.GameObjects.Sprite,
   tweens?: any,

@@ -5,15 +5,18 @@ import { cursors } from './cursors';
 import { dungeonManager } from './dungeon-manager';
 import { getRandomNumber } from '../utils/random-number-generator.util';
 import { ui } from '../scenes/ui.scene';
+import Item from './items/item';
 
 export default class Player extends Entity {
   type = 'player';
   uiStatsText!: Phaser.GameObjects.Text;
   uiItems!: Array<Phaser.GameObjects.Rectangle>;
+  items: Array<Item>;
 
   constructor() {
     super(15, 15, 1, Tile.playerTile);
     this.healthPoints = 15;
+    this.items = [];
   }
 
   turn() {
@@ -87,6 +90,21 @@ export default class Player extends Entity {
   }
 
   attack() { return getRandomNumber(1, 5); }
+
+  toggleItem(itemKey: number) {
+    const item = this.items[itemKey];
+
+    if (item) {
+      if (item.weapon) {
+        this.items.forEach(i => i.active = i.weapon ? false : i.active);
+      }
+      item.active = !item.active;
+      if (item.active) {
+        dungeonManager.log(`${this.type} equips ${item.name} : ${item.description}.`);
+        item.equip(itemKey);
+      }
+    }
+  }
 
   onDestroy() {
     dungeonManager.log('you died');

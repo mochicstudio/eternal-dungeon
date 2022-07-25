@@ -25,7 +25,7 @@ export default class Item {
 
   damage() { return 0; }
   turn() { }
-  equip() { }
+  equip(itemKey: number) { }
   unequip() { }
   refresh() { }
   over() { return true; }
