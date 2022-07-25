@@ -1,9 +1,9 @@
 import PF from 'pathfinding';
-import { ui } from '../scenes/ui.scene';
-import Entity from './entity';
-import { dungeonManager } from './dungeon-manager';
-import Position from '../models/position.model';
-import { getRandomNumber } from '../utils/random-number-generator.util';
+import { ui } from '../../scenes/ui.scene';
+import Entity from '../entity';
+import { dungeonManager } from '../dungeon-manager';
+import Position from '../../models/position.model';
+import { getRandomNumber } from '../../utils/random-number-generator.util';
 
 export default class Monster extends Entity {
   constructor(position: Position, movePoints: number, tile: number) {

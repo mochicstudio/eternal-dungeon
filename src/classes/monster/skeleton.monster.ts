@@ -1,4 +1,4 @@
-import Monster from "../monster";
+import Monster from './monster';
 import { dungeonManager } from "../dungeon-manager";
 import Position from "../../models/position.model";
 import { Tile } from "../../enums/tiles.enum";

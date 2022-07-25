@@ -1,4 +1,4 @@
-import Monster from "../monster";
+import Monster from './monster';
 import { Tile } from "../../enums/tiles.enum";
 import { MonsterType } from "../../enums/monster-type.enum";
 
