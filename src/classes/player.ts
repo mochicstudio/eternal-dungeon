@@ -89,10 +89,13 @@ export default class Player extends Entity {
     this.actionPoints = 1;
   }
 
-  attack() { return getRandomNumber(1, 5); }
+  attack() {
+    const items = this.equippedItems();
+    return items.reduce((total, item) => total + item.damage(), getRandomNumber(1, 5));
+  }
 
-  toggleItem(itemKey: number) {
-    const item = this.items[itemKey];
+  toggleItem(slot: number) {
+    const item = this.items[slot];
 
     if (item) {
       if (item.weapon) {
@@ -101,10 +104,28 @@ export default class Player extends Entity {
       item.active = !item.active;
       if (item.active) {
         dungeonManager.log(`${this.type} equips ${item.name} : ${item.description}.`);
-        item.equip(itemKey);
+        item.equip(slot);
       }
     }
   }
+
+  removeItem(slot: number) {
+    const specificItem = this.items[slot];
+
+    if (specificItem) {
+      this.items.forEach(item => item.uiSprite.destroy());
+      this.items = this.items.filter(itemAgain => itemAgain !== specificItem);
+      this.refreshUI();
+    }
+  }
+
+  removeItemByProperty(property: string, value: any) {
+    this.items.forEach(item => item.uiSprite.destroy());
+    this.items = this.items.filter(itemAgain => itemAgain[property as keyof typeof itemAgain] !== value);
+    this.refreshUI();
+  }
+
+  equippedItems = () => this.items.filter(item => item.active);
 
   onDestroy() {
     dungeonManager.log('you died');
@@ -129,6 +150,8 @@ export default class Player extends Entity {
 
     return accumulatedHeight;
   }
+
+  refreshUI() { }
 
   renderItemSlots(position: Position) {
     let itemsPerRow = 5

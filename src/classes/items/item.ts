@@ -7,6 +7,7 @@ export default class Item {
   name: string;
   description: string;
   position!: Position;
+  uiSprite!: Phaser.GameObjects.Sprite;
 
   constructor(position: Position) {
     this.active = false;
@@ -23,7 +24,7 @@ export default class Item {
     }
   }
 
-  damage() { return 0; }
+  damage = () => 0;
   turn() { }
   equip(itemKey: number) { }
   unequip() { }
