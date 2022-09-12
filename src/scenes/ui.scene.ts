@@ -14,6 +14,8 @@ class UI extends Phaser.Scene {
     this.created = false;
   }
 
+  init() { this.input.keyboard.enabled = false; }
+
   create() { this.scene.get('EternalDungeon').events.on('renderUI', () => this.render()); }
 
   render() {
