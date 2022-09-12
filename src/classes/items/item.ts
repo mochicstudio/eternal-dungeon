@@ -6,6 +6,7 @@ export default class Item {
   weapon: boolean;
   name: string;
   description: string;
+  tile!: number;
   position!: Position;
   uiSprite!: Phaser.GameObjects.Sprite;
 

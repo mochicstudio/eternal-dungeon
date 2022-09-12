@@ -151,7 +151,27 @@ export default class Player extends Entity {
     return accumulatedHeight;
   }
 
-  refreshUI() { }
+  refreshUI() {
+    this.items.forEach((item: Item, index) => {
+      const MARGIN = 10;
+
+      if (!item.uiSprite) {
+        let position: Position = {
+          x: this.uiItems[index].x + MARGIN,
+          y: this.uiItems[index].y + MARGIN
+        }
+        item.uiSprite = ui.add.sprite(position.x, position.y, 'world', item.tile);
+      }
+
+      if (item.active) {
+        item.uiSprite.setAlpha(0.5);
+        this.uiItems[index].setStrokeStyle();
+      } else {
+        item.uiSprite.setAlpha(1);
+        this.uiItems[index].setStrokeStyle(1, 0xffffff);
+      }
+    });
+  }
 
   renderItemSlots(position: Position) {
     let itemsPerRow = 5
