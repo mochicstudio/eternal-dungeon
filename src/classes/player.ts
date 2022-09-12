@@ -47,15 +47,23 @@ export default class Player extends Entity {
       if (moved) {
         this.movePoints -= 1;
         if (dungeonManager.isWalkableTile(nextPosition)) {
-          const enemy = dungeonManager.entityAtTile(nextPosition);
+          const entity = dungeonManager.entityAtTile(nextPosition);
 
-          if (enemy && this.actionPoints > 0) {
-            dungeonManager.attackEntity(this, enemy);
+          if (entity && entity.type === 'monster' && this.actionPoints > 0) {
+            dungeonManager.attackEntity(this, entity);
             this.actionPoints -= 1;
             nextPosition = {
               x: this.position.x,
               y: this.position.y
             };
+          }
+
+          if (entity && entity.type === 'item' && this.actionPoints > 0) {
+            this.items.push(entity as Item);
+            this.actionPoints -= 1;
+          } else {
+            nextPosition.x = this.position.x;
+            nextPosition.y = this.position.y;
           }
 
           if (this.position.x !== nextPosition.x || this.position.y !== nextPosition.y) this.moveEntityTo(nextPosition);
@@ -66,6 +74,7 @@ export default class Player extends Entity {
     }
 
     this.isMoving = false;
+    this.refreshUI();
   }
 
   over(): boolean {

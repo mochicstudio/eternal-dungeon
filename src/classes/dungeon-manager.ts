@@ -34,9 +34,9 @@ class DungeonManager {
     return tileAtDestination?.index !== Tile.wallTile;
   }
 
-  entityAtTile(position: Position): Entity | null {
+  entityAtTile(position: Position): Entity {
     const entities = [...turnManager.getEntities()];
-    let entityAtTile = null;
+    let entityAtTile = null as any;
 
     entities.forEach(entity => {
       if (entity.position.x === position.x && entity.position.y === position.y) {

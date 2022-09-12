@@ -6,8 +6,11 @@ import Position from '../../models/position.model';
 import { getRandomNumber } from '../../utils/random-number-generator.util';
 
 export default class Monster extends Entity {
+  type: string;
+
   constructor(position: Position, movePoints: number, tile: number) {
     super(position.x, position.y, movePoints, tile);
+    this.type = 'monster';
   }
 
   turn() {
