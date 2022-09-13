@@ -12,18 +12,18 @@ export default class Entity implements EntityModel {
   actionPoints: number;
   healthPoints: number;
   spriteTile: number;
-  sprite: Phaser.GameObjects.Sprite;
+  sprite?: Phaser.GameObjects.Sprite;
   uiSprite!: Phaser.GameObjects.Sprite;
   uiText!: Phaser.GameObjects.Text;
 
   constructor(positionX: number, positionY: number, movePoints: number, spriteTile: number) {
     this.position = {
-      x: positionX,
-      y: positionY
+      x: 0,
+      y: 0
     };
     this.positionInWorld = {
-      x: dungeonManager.level.map?.tileToWorldX(positionX) as number,
-      y: dungeonManager.level.map?.tileToWorldX(positionY) as number
+      x: dungeonManager.level.map?.tileToWorldX(this.position.x) as number,
+      y: dungeonManager.level.map?.tileToWorldX(this.position.y) as number
     };
     this.isMoving = false;
     this.movePoints = movePoints;
@@ -31,8 +31,19 @@ export default class Entity implements EntityModel {
     this.actionPoints = 1;
     this.healthPoints = 1;
     this.spriteTile = spriteTile;
-    this.sprite = eternalDungeon.add.sprite(this.positionInWorld.x, this.positionInWorld.y, 'world', this.spriteTile);
-    this.sprite.setOrigin(0);
+
+    if (positionX && positionY) {
+      this.position = {
+        x: positionX,
+        y: positionY
+      };
+      this.positionInWorld = {
+        x: dungeonManager.level.map?.tileToWorldX(positionX) as number,
+        y: dungeonManager.level.map?.tileToWorldX(positionY) as number
+      };
+      this.sprite = eternalDungeon.add.sprite(this.positionInWorld.x, this.positionInWorld.y, 'world', this.spriteTile);
+      this.sprite.setOrigin(0);
+    }
   }
 
   moveEntityTo(position: Position) {

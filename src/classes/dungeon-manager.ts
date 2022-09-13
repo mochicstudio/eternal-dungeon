@@ -25,9 +25,7 @@ class DungeonManager {
   isWalkableTile(position: Position) {
     const entities = [...turnManager.getEntities()];
     entities.forEach(entity => {
-      if (entity.position.x === position.x && entity.position.y === position.y) {
-        return false;
-      }
+      if (entity.sprite && entity.position.x === position.x && entity.position.y === position.y) return false;
     });
 
     const tileAtDestination = this.level.map?.getTileAt(position.x, position.y);
@@ -39,9 +37,7 @@ class DungeonManager {
     let entityAtTile = null as any;
 
     entities.forEach(entity => {
-      if (entity.position.x === position.x && entity.position.y === position.y) {
-        entityAtTile = entity;
-      }
+      if (entity.sprite && entity.position.x === position.x && entity.position.y === position.y) entityAtTile = entity;
     });
 
     return entityAtTile;
@@ -64,8 +60,10 @@ class DungeonManager {
       targets: attacker.sprite,
       onComplete: () => {
         if (attacker.isAlive() && victim.isAlive()) {
-          attacker.sprite.x = this.level.map?.tileToWorldX(attacker.position.x) as number;
-          attacker.sprite.y = this.level.map?.tileToWorldY(attacker.position.y) as number;
+          if (attacker.sprite) {
+            attacker.sprite.x = this.level.map?.tileToWorldX(attacker.position.x) as number;
+            attacker.sprite.y = this.level.map?.tileToWorldY(attacker.position.y) as number;
+          }
           // attacker.tweens -= 1;
 
           const damage = attacker.attack();

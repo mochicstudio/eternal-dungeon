@@ -10,7 +10,7 @@ export default interface Entity {
   type?: string,
   items?: Array<Item>,
   spriteTile: number,
-  sprite: Phaser.GameObjects.Sprite,
+  sprite?: Phaser.GameObjects.Sprite,
   tweens?: any,
   uiSprite: Phaser.GameObjects.Sprite,
   uiText: Phaser.GameObjects.Text,

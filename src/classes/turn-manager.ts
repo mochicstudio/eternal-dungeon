@@ -1,4 +1,5 @@
 import Entity from '../models/entity.model';
+import Item from './items/item';
 
 class TurnManager {
   private entities: Set<Entity> = new Set();
@@ -10,12 +11,18 @@ class TurnManager {
 
   removeEntity(entity: Entity) {
     this.entities.delete(entity);
-    entity.sprite.destroy();
+    entity.sprite?.destroy();
+    delete entity.sprite;
     entity.onDestroy();
   }
 
   getEntities() { return this.entities; }
   getEntitiesValues() { return this.entities.values(); }
+
+  itemPicked(entity: Item) {
+    entity.sprite?.destroy();
+    delete entity.sprite;
+  }
 
   turn() {
     if (this.entities.size > 0) {

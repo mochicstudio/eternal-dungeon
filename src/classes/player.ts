@@ -1,11 +1,12 @@
 import { Tile } from '../enums/tiles.enum';
 import Position from '../models/position.model';
 import Entity from './entity';
+import Item from './items/item';
 import { cursors } from './cursors';
 import { dungeonManager } from './dungeon-manager';
-import { getRandomNumber } from '../utils/random-number-generator.util';
+import { turnManager } from './turn-manager';
 import { ui } from '../scenes/ui.scene';
-import Item from './items/item';
+import { getRandomNumber } from '../utils/random-number-generator.util';
 
 export default class Player extends Entity {
   type = 'player';
@@ -61,13 +62,14 @@ export default class Player extends Entity {
           if (entity && entity.type === 'item' && this.actionPoints > 0) {
             this.items.push(entity as Item);
             this.actionPoints -= 1;
+            turnManager.itemPicked(entity as Item);
           }
 
           if (this.position.x !== nextPosition.x || this.position.y !== nextPosition.y) this.moveEntityTo(nextPosition);
         }
       }
 
-      if (this.healthPoints <= 5) this.sprite.tint = Phaser.Display.Color.GetColor(255, 0, 0);
+      if (this.healthPoints <= 5 && this.sprite) this.sprite.tint = Phaser.Display.Color.GetColor(255, 0, 0);
     }
 
     this.isMoving = false;
