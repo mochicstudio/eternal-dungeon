@@ -10,5 +10,6 @@ export enum Tile {
   itemSword = 320,
   itemLongSword = 420,
   itemGem = 215,
-  itemCursedGem = 514
+  itemCursedGem = 514,
+  itemPotion = 569
 };
