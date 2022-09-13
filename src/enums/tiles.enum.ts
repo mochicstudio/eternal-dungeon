@@ -6,5 +6,9 @@ export enum Tile {
   playerTile = 25,
   monsterGoblinTile = 26,
   monsterSkeletonTile = 317,
-  monsterGolemTile = 318
+  monsterGolemTile = 318,
+  itemSword = 320,
+  itemLongSword = 420,
+  itemGem = 215,
+  itemCursedGem = 514
 };

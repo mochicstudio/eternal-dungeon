@@ -1,15 +1,15 @@
-import Monster from './monster';
-import { dungeonManager } from "../dungeon-manager";
-import Position from "../../models/position.model";
 import { Tile } from "../../enums/tiles.enum";
 import { MonsterType } from "../../enums/monster-type.enum";
+import Position from "../../models/position.model";
+import Monster from './monster';
+import { dungeonManager } from "../dungeon-manager";
 
 export default class Skeleton extends Monster {
-  type: MonsterType;
+  monsterType: MonsterType;
 
   constructor() {
     super({ x: 60, y: 5 }, 3, Tile.monsterSkeletonTile);
-    this.type = MonsterType.skeleton;
+    this.monsterType = MonsterType.skeleton;
   }
 
   turn() {

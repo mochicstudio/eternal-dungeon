@@ -1,19 +1,19 @@
+import { EntityType } from '../../enums/entity-type.enum';
 import Position from '../../models/position.model';
 import Entity from '../entity';
 
 export default class Item extends Entity {
   active: boolean;
-  type: string;
   weapon: boolean;
   name: string;
   description: string;
   tile!: number;
 
-  constructor(position: Position) {
-    super(position.x, position.y, 0, 0);
+  constructor(position: Position, spriteTile: number) {
+    super(position.x, position.y, 0, spriteTile);
 
     this.active = false;
-    this.type = 'item';
+    this.type = EntityType.item;
     this.weapon = false;
     this.name = 'no name';
     this.description = 'no description';
@@ -24,6 +24,6 @@ export default class Item extends Entity {
   equip(itemKey: number) { }
   unequip() { }
   refresh() { }
-  over() { return true; }
-  renderUI() { return 0; }
+  over = () => true;
+  renderUI = () => 0;
 }

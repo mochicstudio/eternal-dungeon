@@ -6,7 +6,10 @@ import { cursors } from '../classes/cursors';
 import Goblin from '../classes/monster/goblin.monster';
 import Skeleton from '../classes/monster/skeleton.monster';
 import Golem from '../classes/monster/golem.monster';
+import Sword from '../classes/items/sword.item';
+import Gem from '../classes/items/gem.item';
 import { ui } from './ui.scene';
+import CursedGem from '../classes/items/cursed-gem.item';
 
 class EternalDungeon extends Phaser.Scene {
   constructor() {
@@ -43,6 +46,18 @@ class EternalDungeon extends Phaser.Scene {
     turnManager.addEntity(new Goblin());
     turnManager.addEntity(new Skeleton());
     turnManager.addEntity(new Golem());
+    turnManager.addEntity(new Sword({
+      x: dungeonManager.player.position.x + 1,
+      y: dungeonManager.player.position.y
+    }));
+    turnManager.addEntity(new Gem({
+      x: dungeonManager.player.position.x + 1,
+      y: dungeonManager.player.position.y + 2
+    }));
+    turnManager.addEntity(new CursedGem({
+      x: dungeonManager.player.position.x - 3,
+      y: dungeonManager.player.position.y - 5
+    }));
 
     const camera = this.cameras.main
     camera.setViewport(0, 0, camera.worldView.width - 200, camera.worldView.height);

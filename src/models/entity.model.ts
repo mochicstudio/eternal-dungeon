@@ -1,3 +1,4 @@
+import { EntityType } from '../enums/entity-type.enum';
 import Item from '../classes/items/item';
 
 export default interface Entity {
@@ -7,7 +8,7 @@ export default interface Entity {
   restorePoints: number,
   actionPoints: number,
   healthPoints: number,
-  type?: string,
+  type: EntityType,
   items?: Array<Item>,
   spriteTile: number,
   sprite?: Phaser.GameObjects.Sprite,

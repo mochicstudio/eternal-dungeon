@@ -1,3 +1,4 @@
+import { EntityType } from './../../enums/entity-type.enum';
 import PF from 'pathfinding';
 import Position from '../../models/position.model';
 import Entity from '../entity';
@@ -6,11 +7,9 @@ import { ui } from '../../scenes/ui.scene';
 import { getRandomNumber } from '../../utils/random-number-generator.util';
 
 export default class Monster extends Entity {
-  type: string;
-
   constructor(position: Position, movePoints: number, tile: number) {
     super(position.x, position.y, movePoints, tile);
-    this.type = 'monster';
+    this.type = EntityType.monster;
   }
 
   turn() {

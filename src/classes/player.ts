@@ -1,4 +1,5 @@
 import { Tile } from '../enums/tiles.enum';
+import { EntityType } from '../enums/entity-type.enum';
 import Position from '../models/position.model';
 import Entity from './entity';
 import Item from './items/item';
@@ -9,13 +10,13 @@ import { ui } from '../scenes/ui.scene';
 import { getRandomNumber } from '../utils/random-number-generator.util';
 
 export default class Player extends Entity {
-  type = 'player';
   uiStatsText!: Phaser.GameObjects.Text;
   uiItems!: Array<Phaser.GameObjects.Rectangle>;
   items: Array<Item>;
 
   constructor() {
     super(15, 15, 1, Tile.playerTile);
+    this.type = EntityType.player;
     this.healthPoints = 15;
     this.items = [];
   }
@@ -100,6 +101,10 @@ export default class Player extends Entity {
   attack() {
     const items = this.equippedItems();
     return items.reduce((total, item) => total + item.damage(), getRandomNumber(1, 5));
+  }
+
+  receiveDamage(damage: number) {
+    this.healthPoints -= damage;
   }
 
   toggleItem(slot: number) {
