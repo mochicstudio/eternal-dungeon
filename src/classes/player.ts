@@ -61,9 +61,6 @@ export default class Player extends Entity {
           if (entity && entity.type === 'item' && this.actionPoints > 0) {
             this.items.push(entity as Item);
             this.actionPoints -= 1;
-          } else {
-            nextPosition.x = this.position.x;
-            nextPosition.y = this.position.y;
           }
 
           if (this.position.x !== nextPosition.x || this.position.y !== nextPosition.y) this.moveEntityTo(nextPosition);
