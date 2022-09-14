@@ -5,8 +5,6 @@ import Monster from './monster';
 import { dungeonManager } from "../dungeon-manager";
 
 export default class Golem extends Monster {
-  monsterType: MonsterType;
-
   constructor() {
     super({ x: 75, y: 10 }, 1, Tile.monsterGolemTile);
     this.monsterType = MonsterType.golem;

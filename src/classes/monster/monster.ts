@@ -1,12 +1,20 @@
-import { EntityType } from './../../enums/entity-type.enum';
 import PF from 'pathfinding';
+import { EntityType } from './../../enums/entity-type.enum';
+import { MonsterType } from '../../enums/monster-type.enum';
 import Position from '../../models/position.model';
 import Entity from '../entity';
+import Gem from '../items/gem.item';
+import CursedGem from '../items/cursed-gem.item';
+import LongSword from '../items/long-sword.item';
 import { dungeonManager } from '../dungeon-manager';
 import { ui } from '../../scenes/ui.scene';
 import { getRandomNumber } from '../../utils/random-number-generator.util';
+import { turnManager } from '../turn-manager';
 
 export default class Monster extends Entity {
+  readonly lootPosibilities = [null, null, Gem, CursedGem, LongSword];
+  monsterType!: MonsterType;
+
   constructor(position: Position, movePoints: number, tile: number) {
     super(position.x, position.y, movePoints, tile);
     this.type = EntityType.monster;
@@ -57,6 +65,17 @@ export default class Monster extends Entity {
     dungeonManager.log('monster killed');
     this.uiSprite.setAlpha(0.2);
     this.uiText.setAlpha(0.2);
+    this.spawnLoot();
+  }
+
+  spawnLoot() {
+    const lootIndex = getRandomNumber(0, this.lootPosibilities.length - 1);
+    const item = this.lootPosibilities[lootIndex];
+
+    if (item) {
+      turnManager.addEntity(new item({ x: this.position.x, y: this.position.y }));
+      dungeonManager.log(`${this.monsterType} drops ${item.name}`);
+    }
   }
 
   getPath(position: Position): number[][] | any {

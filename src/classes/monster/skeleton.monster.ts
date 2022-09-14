@@ -5,8 +5,6 @@ import Monster from './monster';
 import { dungeonManager } from "../dungeon-manager";
 
 export default class Skeleton extends Monster {
-  monsterType: MonsterType;
-
   constructor() {
     super({ x: 60, y: 5 }, 3, Tile.monsterSkeletonTile);
     this.monsterType = MonsterType.skeleton;

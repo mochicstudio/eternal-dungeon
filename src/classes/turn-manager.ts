@@ -1,4 +1,5 @@
 import Entity from '../models/entity.model';
+import { dungeonManager } from './dungeon-manager';
 import Item from './items/item';
 
 class TurnManager {
@@ -39,11 +40,11 @@ class TurnManager {
     }
   }
 
-  over(): boolean { return [...this.entities].every((entity) => entity.over()); }
+  over(): boolean { return [...this.entities].every(entity => entity.over()); }
 
   refresh() {
     this.currentEntityIndex = 0;
-    this.entities.forEach((entity) => entity.isAlive ? entity.refresh() : null);
+    this.entities.forEach(entity => entity.isAlive ? entity.refresh() : null);
   }
 }
 
