@@ -1,3 +1,6 @@
+import { EntityType } from '../enums/entity-type.enum';
+import Item from '../classes/item/item';
+
 export default interface Entity {
   position: { x: number, y: number },
   isMoving: boolean;
@@ -5,13 +8,18 @@ export default interface Entity {
   restorePoints: number,
   actionPoints: number,
   healthPoints: number,
-  type?: string,
-  sprite: Phaser.GameObjects.Sprite,
+  type: EntityType,
+  items?: Array<Item>,
+  spriteTile: number,
+  sprite?: Phaser.GameObjects.Sprite,
   tweens?: any,
-  Turn: Function,
-  Over: Function,
-  Refresh: Function
-  Attack: Function,
-  OnDestroy: Function
+  uiSprite: Phaser.GameObjects.Sprite,
+  uiText: Phaser.GameObjects.Text,
+  turn: Function,
+  over: Function,
+  refresh: Function
+  attack: Function,
+  onDestroy: Function,
   isAlive: Function,
+  renderUI: Function
 }

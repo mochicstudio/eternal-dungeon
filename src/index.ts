@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
 import config from './config';
-import MochichStudioLogo from './scenes/MochichStudioLogo';
+import { mochicStudioLogo } from './scenes/mochic-studio.scene';
 
-new Phaser.Game(Object.assign(config, { scene: [new MochichStudioLogo()] }));
+new Phaser.Game(Object.assign(config, {
+  scene: [mochicStudioLogo]
+}));

@@ -1,0 +1,19 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#game {
+  height: 100%;
+}
+
+.booting-screen {
+  background-color: #33A5E7;
+}
+
+.in-game-screen {
+  background-color: #472d3c;
+}
