@@ -6,10 +6,14 @@ import { cursors } from '../classes/cursors';
 import Goblin from '../classes/monster/goblin.monster';
 import Skeleton from '../classes/monster/skeleton.monster';
 import Golem from '../classes/monster/golem.monster';
-import Sword from '../classes/items/sword.item';
-import Gem from '../classes/items/gem.item';
-import CursedGem from '../classes/items/cursed-gem.item';
-import Potion from '../classes/items/potion.item';
+import CoinChaser from '../classes/monster/coin-chaser.monster';
+import Sword from '../classes/item/weapon/sword.item.weapon';
+import Gem from '../classes/item/gem/gem.item';
+import CoinGem from '../classes/item/gem/coin.item.gem';
+import CursedGem from '../classes/item/gem/cursed.item.gem';
+import UncursedPotion from '../classes/item/potion/uncursed.item.potion';
+import HealthPotion from '../classes/item/potion/health-buster.item.potion';
+import AttackBusterPotion from '../classes/item/potion/attack-buster.item.potion';
 import { ui } from './ui.scene';
 
 class EternalDungeon extends Phaser.Scene {
@@ -47,9 +51,14 @@ class EternalDungeon extends Phaser.Scene {
     turnManager.addEntity(new Goblin());
     turnManager.addEntity(new Skeleton());
     turnManager.addEntity(new Golem());
+    turnManager.addEntity(new CoinChaser());
     turnManager.addEntity(new Sword({
       x: dungeonManager.player.position.x + 1,
       y: dungeonManager.player.position.y
+    }));
+    turnManager.addEntity(new CoinGem({
+      x: dungeonManager.player.position.x + 2,
+      y: dungeonManager.player.position.y + 2
     }));
     turnManager.addEntity(new Gem({
       x: dungeonManager.player.position.x + 1,
@@ -59,9 +68,17 @@ class EternalDungeon extends Phaser.Scene {
       x: dungeonManager.player.position.x - 3,
       y: dungeonManager.player.position.y - 5
     }));
-    turnManager.addEntity(new Potion({
+    turnManager.addEntity(new UncursedPotion({
       x: dungeonManager.player.position.x - 3,
       y: dungeonManager.player.position.y - 6
+    }));
+    turnManager.addEntity(new HealthPotion({
+      x: dungeonManager.player.position.x + 6,
+      y: dungeonManager.player.position.y - 4
+    }));
+    turnManager.addEntity(new AttackBusterPotion({
+      x: dungeonManager.player.position.x + 8,
+      y: dungeonManager.player.position.y - 1
     }));
 
     const camera = this.cameras.main

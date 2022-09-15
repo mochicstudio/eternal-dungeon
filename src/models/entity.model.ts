@@ -1,5 +1,5 @@
 import { EntityType } from '../enums/entity-type.enum';
-import Item from '../classes/items/item';
+import Item from '../classes/item/item';
 
 export default interface Entity {
   position: { x: number, y: number },

@@ -1,8 +1,8 @@
-import { Tile } from '../../enums/tiles.enum';
-import Position from '../../models/position.model';
-import Item from './item';
-import { turnManager } from '../turn-manager';
-import { dungeonManager } from '../dungeon-manager';
+import { Tile } from '../../../enums/tiles.enum';
+import Position from '../../../models/position.model';
+import Item from '../item';
+import { turnManager } from '../../turn-manager';
+import { dungeonManager } from '../../dungeon-manager';
 
 export default class CursedGem extends Item {
   cursed: boolean;

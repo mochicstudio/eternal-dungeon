@@ -1,6 +1,6 @@
 import Entity from '../models/entity.model';
 import { dungeonManager } from './dungeon-manager';
-import Item from './items/item';
+import Item from './item/item';
 
 class TurnManager {
   private entities: Set<Entity> = new Set();

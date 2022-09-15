@@ -1,7 +1,7 @@
-import { Tile } from '../../enums/tiles.enum';
-import Position from '../../models/position.model';
-import Item from './item';
-import { getRandomNumber } from '../../utils/random-number-generator.util';
+import { Tile } from '../../../enums/tiles.enum';
+import Position from '../../../models/position.model';
+import Item from '../item';
+import { getRandomNumber } from '../../../utils/random-number-generator.util';
 
 export default class Sword extends Item {
   constructor(position: Position) {

@@ -2,7 +2,7 @@ import { Tile } from '../enums/tiles.enum';
 import { EntityType } from '../enums/entity-type.enum';
 import Position from '../models/position.model';
 import Entity from './entity';
-import Item from './items/item';
+import Item from './item/item';
 import { cursors } from './cursors';
 import { dungeonManager } from './dungeon-manager';
 import { turnManager } from './turn-manager';
@@ -126,16 +126,20 @@ export default class Player extends Entity {
     const specificItem = this.items[slot];
 
     if (specificItem) {
-      this.items.forEach(item => item.uiSprite.destroy());
-      this.items = this.items.filter(itemAgain => itemAgain !== specificItem);
+      this.items.forEach(item => { if (item === specificItem) item.uiSprite.destroy() });
+      this.items = this.items.filter(item => item !== specificItem);
       this.refreshUI();
     }
   }
 
   removeItemByProperty(property: string, value: any) {
-    this.items.forEach(item => item.uiSprite.destroy());
-    this.items = this.items.filter(itemAgain => itemAgain[property as keyof typeof itemAgain] !== value);
+    this.items.filter(item => item[property as keyof typeof item] === value).forEach(item => item.uiSprite.destroy());
+    this.items = this.items.filter(item => item[property as keyof typeof item] !== value);
     this.refreshUI();
+  }
+
+  getItemByProperty(property: string, value: any) {
+    return this.items.filter(item => item[property as keyof typeof item] === value)[0];
   }
 
   equippedItems = () => this.items.filter(item => item.active);
