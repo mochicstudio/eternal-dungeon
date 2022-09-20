@@ -54,8 +54,8 @@ class DungeonManager {
 
   attackEntity(attacker: Entity, victim: Entity) {
     attacker.isMoving = true;
-    // attacker.tweens = attacker.tweens || 0;
-    // attacker.tweens += 1;
+    attacker.tweens = attacker.tweens || 0;
+    attacker.tweens += 1;
     eternalDungeon.tweens.add({
       targets: attacker.sprite,
       onComplete: () => {
@@ -64,11 +64,11 @@ class DungeonManager {
             attacker.sprite.x = this.level.map?.tileToWorldX(attacker.position.x) as number;
             attacker.sprite.y = this.level.map?.tileToWorldY(attacker.position.y) as number;
           }
-          // attacker.tweens -= 1;
+          attacker.tweens -= 1;
 
-          const damage = attacker.attack();
+          const damage = attacker.getAttackPoints();
           this.log(`${attacker.type} damage done: ${damage} to ${victim.type}`);
-          victim.healthPoints -= damage;
+          victim.receiveDamage(damage);
 
           if (!victim.isAlive()) turnManager.removeEntity(victim);
         }
@@ -78,7 +78,7 @@ class DungeonManager {
       ease: 'Power2',
       hold: 20,
       duration: 80,
-      delay: 200,
+      delay: attacker.tweens * 200,
       yoyo: true
     });
   }

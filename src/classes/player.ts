@@ -49,21 +49,23 @@ export default class Player extends Entity {
       if (moved) {
         this.movePoints -= 1;
         if (dungeonManager.isWalkableTile(nextPosition)) {
-          const entity = dungeonManager.entityAtTile(nextPosition);
+          const entityAtNextTile = dungeonManager.entityAtTile(nextPosition);
 
-          if (entity && entity.type === 'monster' && this.actionPoints > 0) {
-            dungeonManager.attackEntity(this, entity);
-            this.actionPoints -= 1;
-            nextPosition = {
-              x: this.position.x,
-              y: this.position.y
-            };
-          }
+          if (entityAtNextTile && this.actionPoints > 0) {
+            if (entityAtNextTile.type === EntityType.monster) {
+              this.attack(entityAtNextTile);
+              this.actionPoints -= 1;
+              nextPosition = {
+                x: this.position.x,
+                y: this.position.y
+              };
+            }
 
-          if (entity && entity.type === 'item' && this.actionPoints > 0) {
-            this.items.push(entity as Item);
-            this.actionPoints -= 1;
-            turnManager.itemPicked(entity as Item);
+            if (entityAtNextTile.type === EntityType.item) {
+              this.items.push(entityAtNextTile as Item);
+              this.actionPoints -= 1;
+              turnManager.itemPicked(entityAtNextTile as Item);
+            }
           }
 
           if (this.position.x !== nextPosition.x || this.position.y !== nextPosition.y) this.moveEntityTo(nextPosition);
@@ -98,7 +100,11 @@ export default class Player extends Entity {
     this.actionPoints = 1;
   }
 
-  attack() {
+  attack(victim: Entity) {
+    dungeonManager.attackEntity(this, victim);
+  }
+
+  getAttackPoints() {
     const items = this.equippedItems();
     return items.reduce((total, item) => total + item.damage(), getRandomNumber(1, 5));
   }

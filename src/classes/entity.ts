@@ -13,6 +13,7 @@ export default class Entity implements EntityModel {
   actionPoints: number;
   healthPoints: number;
   spriteTile: number;
+  tweens: number;
   type!: EntityType;
   sprite?: Phaser.GameObjects.Sprite;
   uiSprite!: Phaser.GameObjects.Sprite;
@@ -27,6 +28,7 @@ export default class Entity implements EntityModel {
     this.movePoints = movePoints;
     this.restorePoints = movePoints;
     this.spriteTile = spriteTile;
+    this.tweens = 0;
 
     if (positionX && positionY) {
       this.position = { x: positionX, y: positionY };
@@ -58,13 +60,12 @@ export default class Entity implements EntityModel {
   }
 
   turn() { }
-
   over(): boolean { return this.movePoints === 0 && !this.isMoving; }
-
   refresh() { }
-  attack() { }
+  attack(_victim: EntityModel) { }
+  getAttackPoints() { return 0; }
+  receiveDamage(damage: number) { this.healthPoints -= damage; }
   onDestroy() { }
-
   isAlive(): boolean { return this.healthPoints > 0; }
-  renderUI(position: Position, width?: number) { return 0; }
+  renderUI(_position: Position, _width?: number) { return 0; }
 }
