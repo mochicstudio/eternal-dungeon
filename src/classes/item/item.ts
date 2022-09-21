@@ -20,6 +20,8 @@ export default class Item extends Entity {
   }
 
   damage = () => 0;
+  proection() { return 0; }
+  range() { return 0; }
   turn() { }
   equip(itemKey: number) { }
   unequip() { }
