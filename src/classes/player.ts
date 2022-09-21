@@ -7,75 +7,82 @@ import { cursors } from './cursors';
 import { dungeonManager } from './dungeon-manager';
 import { turnManager } from './turn-manager';
 import { ui } from '../scenes/ui.scene';
+import { isEntityAMonster, isEntityAnItem } from '../helpers/entity-type.helper';
 import { getRandomNumber } from '../utils/random-number-generator.util';
 
 export default class Player extends Entity {
   uiStatsText!: Phaser.GameObjects.Text;
   uiItems!: Array<Phaser.GameObjects.Rectangle>;
   items: Array<Item>;
+  pattern = ['move', 'attack'];
+  nextPosition: Position;
 
   constructor() {
     super(15, 15, 1, Tile.playerTile);
     this.type = EntityType.player;
     this.healthPoints = 15;
     this.items = [];
+    this.nextPosition = { x: this.position.x, y: this.position.y };
   }
 
+  checkMoveInput() {
+    if (cursors.cursorKeys?.left.isDown) {
+      this.nextPosition.x -= 1;
+      this.setIsMoving();
+    }
+    if (cursors.cursorKeys?.right.isDown) {
+      this.nextPosition.x += 1;
+      this.setIsMoving();
+    }
+    if (cursors.cursorKeys?.down.isDown) {
+      this.nextPosition.y += 1;
+      this.setIsMoving();
+    }
+    if (cursors.cursorKeys?.up.isDown) {
+      this.nextPosition.y -= 1;
+      this.setIsMoving();
+    }
+  }
+
+  move() { dungeonManager.moveEntityTo(this, this.nextPosition); }
+  positionsAreDiferent(): boolean { return this.position.x !== this.nextPosition.x || this.position.y !== this.nextPosition.y; }
+  setIsMoving() { this.isMoving = true; }
+  resetIsMoving() { this.isMoving = false; }
+  resetNextPosition() { this.nextPosition = { x: this.position.x, y: this.position.y }; }
+  hasRemainingMovePoints(): boolean { return this.movePoints > 0; }
+  spendMovePoint() { this.movePoints -= 1; }
+  hasRemainingActionPoints(): boolean { return this.actionPoints > 0; }
+  spendActionPoint() { this.actionPoints -= 1; }
+  addItem(item: Item) { this.items.push(item); }
+
   turn() {
-    let nextPosition: Position = {
-      x: this.position.x,
-      y: this.position.y
-    };
-    let moved = false;
+    if (this.hasRemainingMovePoints() && !this.isMoving) {
+      this.checkMoveInput();
+      if (this.isMoving) {
+        this.spendMovePoint();
+        if (dungeonManager.isWalkableTile(this.nextPosition) && this.hasRemainingActionPoints()) {
+          const entityAtNextTile = dungeonManager.entityAtTile(this.nextPosition);
 
-    if (this.movePoints > 0 && !this.isMoving) {
-      if (cursors.cursorKeys?.left.isDown) {
-        nextPosition.x -= 1;
-        moved = true;
-      }
-      if (cursors.cursorKeys?.right.isDown) {
-        nextPosition.x += 1;
-        moved = true;
-      }
-      if (cursors.cursorKeys?.down.isDown) {
-        nextPosition.y += 1;
-        moved = true;
-      }
-      if (cursors.cursorKeys?.up.isDown) {
-        nextPosition.y -= 1;
-        moved = true;
-      }
-
-      if (moved) {
-        this.movePoints -= 1;
-        if (dungeonManager.isWalkableTile(nextPosition)) {
-          const entityAtNextTile = dungeonManager.entityAtTile(nextPosition);
-
-          if (entityAtNextTile && this.actionPoints > 0) {
-            if (entityAtNextTile.type === EntityType.monster) {
+          if (entityAtNextTile) {
+            if (isEntityAMonster(entityAtNextTile)) {
               this.attack(entityAtNextTile);
-              this.actionPoints -= 1;
-              nextPosition = {
-                x: this.position.x,
-                y: this.position.y
-              };
-            }
-
-            if (entityAtNextTile.type === EntityType.item) {
-              this.items.push(entityAtNextTile as Item);
-              this.actionPoints -= 1;
+              this.spendActionPoint();
+              this.resetNextPosition();
+            } else if (isEntityAnItem(entityAtNextTile)) {
+              this.addItem(entityAtNextTile as Item);
+              this.spendActionPoint();
               turnManager.itemPicked(entityAtNextTile as Item);
             }
           }
 
-          if (this.position.x !== nextPosition.x || this.position.y !== nextPosition.y) this.moveEntityTo(nextPosition);
+          if (this.positionsAreDiferent()) this.move();
         }
       }
 
       if (this.healthPoints <= 5 && this.sprite) this.sprite.tint = Phaser.Display.Color.GetColor(255, 0, 0);
     }
 
-    this.isMoving = false;
+    this.resetIsMoving();
     this.refreshUI();
   }
 
@@ -101,17 +108,30 @@ export default class Player extends Entity {
   }
 
   attack(victim: Entity) {
+    this.setIsMoving();
+    this.tweens = this.tweens || 0;
+    this.tweens += 1;
     dungeonManager.attackEntity(this, victim);
   }
 
-  getAttackPoints() {
-    const items = this.equippedItems();
-    return items.reduce((total, item) => total + item.damage(), getRandomNumber(1, 5));
+  attackCallback(victim: Entity) {
+    if (this.isAlive() && victim.isAlive()) {
+      if (this.sprite) {
+        this.sprite.x = dungeonManager.level.map?.tileToWorldX(this.position.x) as number;
+        this.sprite.y = dungeonManager.level.map?.tileToWorldY(this.position.y) as number;
+      }
+      this.tweens -= 1;
+
+      const damage = this.getAttackPoints();
+      dungeonManager.log(`${this.type} damage done: ${damage} to ${victim.type}`);
+      victim.receiveDamage(damage);
+
+      if (!victim.isAlive()) turnManager.removeEntity(victim);
+    }
   }
 
-  receiveDamage(damage: number) {
-    this.healthPoints -= damage;
-  }
+  getAttackPoints() { return this.equippedItems().reduce((total, item) => total + item.damage(), getRandomNumber(1, 5)); }
+  receiveDamage(damage: number) { this.healthPoints -= damage; }
 
   toggleItem(slot: number) {
     const item = this.items[slot];
@@ -148,7 +168,7 @@ export default class Player extends Entity {
     return this.items.filter(item => item[property as keyof typeof item] === value)[0];
   }
 
-  equippedItems = () => this.items.filter(item => item.active);
+  equippedItems() { return this.items.filter(item => item.active); }
 
   onDestroy() {
     dungeonManager.log('you died');

@@ -28,7 +28,7 @@ export default class CoinChaser extends Monster {
       if (dungeonManager.player.getItemByProperty('isGold', true)) {
         const path = this.getPath(previousPosition);
         console.log(path.length);
-        this.moveEntityTo({ x: path[3][0], y: path[3][1] });
+        dungeonManager.moveEntityTo(this, { x: path[3][0], y: path[3][1] });
       }
       this.movePoints -= 1;
     }

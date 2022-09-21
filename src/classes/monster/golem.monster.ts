@@ -19,7 +19,7 @@ export default class Golem extends Monster {
     if (this.movePoints > 0) {
       const path = this.getPath(previousPosition);
       if (path.length < 15) {
-        this.moveEntityTo({ x: path[1][0], y: path[1][1] });
+        dungeonManager.moveEntityTo(this, { x: path[1][0], y: path[1][1] });
       }
       this.movePoints -= 1;
     }

@@ -52,34 +52,33 @@ class DungeonManager {
     else return 0;
   }
 
-  attackEntity(attacker: Entity, victim: Entity) {
-    attacker.isMoving = true;
-    attacker.tweens = attacker.tweens || 0;
-    attacker.tweens += 1;
+  moveEntityTo(entity: Entity, position: Position) {
     eternalDungeon.tweens.add({
-      targets: attacker.sprite,
+      targets: entity.sprite,
       onComplete: () => {
-        if (attacker.isAlive() && victim.isAlive()) {
-          if (attacker.sprite) {
-            attacker.sprite.x = this.level.map?.tileToWorldX(attacker.position.x) as number;
-            attacker.sprite.y = this.level.map?.tileToWorldY(attacker.position.y) as number;
-          }
-          attacker.tweens -= 1;
-
-          const damage = attacker.getAttackPoints();
-          this.log(`${attacker.type} damage done: ${damage} to ${victim.type}`);
-          victim.receiveDamage(damage);
-
-          if (!victim.isAlive()) turnManager.removeEntity(victim);
+        entity.position = {
+          x: position.x,
+          y: position.y
         }
       },
+      x: dungeonManager.level.map?.tileToWorldX(position.x),
+      y: dungeonManager.level.map?.tileToWorldY(position.y),
+      ease: 'Power2',
+      duration: 200
+    });
+  }
+
+  attackEntity(attacker: Entity, victim: Entity) {
+    eternalDungeon.tweens.add({
+      targets: attacker.sprite,
       x: this.level.map?.tileToWorldX(victim.position.x),
       y: this.level.map?.tileToWorldY(victim.position.y),
       ease: 'Power2',
       hold: 20,
       duration: 80,
       delay: attacker.tweens * 200,
-      yoyo: true
+      yoyo: true,
+      onComplete: () => attacker.attackCallback(victim)
     });
   }
 

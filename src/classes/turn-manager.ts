@@ -44,7 +44,7 @@ class TurnManager {
 
   refresh() {
     this.currentEntityIndex = 0;
-    this.entities.forEach(entity => entity.isAlive ? entity.refresh() : null);
+    this.entities.forEach(entity => entity.isAlive() ? entity.refresh() : null);
   }
 }
 

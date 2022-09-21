@@ -29,13 +29,13 @@ export default class Monster extends Entity {
     if (this.movePoints > 0) {
       const path = this.getPath(previousPosition);
       if (path.length > 2) {
-        this.moveEntityTo({ x: path[1][0], y: path[1][1] });
+        dungeonManager.moveEntityTo(this, { x: path[1][0], y: path[1][1] });
       }
       this.movePoints -= 1;
     }
 
     if (this.actionPoints > 0 && this.isPlayerReachable()) {
-      dungeonManager.attackEntity(this, dungeonManager.player);
+      this.attack(dungeonManager.player);
       this.actionPoints = 0;
     }
 
@@ -59,7 +59,31 @@ export default class Monster extends Entity {
     this.actionPoints = 1;
   }
 
-  attack() { return getRandomNumber(2, 3); }
+  attack(victim: Entity) {
+    console.log('attack');
+    this.isMoving = true;
+    this.tweens = this.tweens || 0;
+    this.tweens += 1;
+    dungeonManager.attackEntity(this, victim);
+  }
+
+  attackCallback(victim: Entity) {
+    if (this.isAlive() && victim.isAlive()) {
+      if (this.sprite) {
+        this.sprite.x = dungeonManager.level.map?.tileToWorldX(this.position.x) as number;
+        this.sprite.y = dungeonManager.level.map?.tileToWorldY(this.position.y) as number;
+      }
+      this.tweens -= 1;
+
+      const damage = this.getAttackPoints();
+      dungeonManager.log(`${this.type} damage done: ${damage} to ${victim.type}`);
+      victim.receiveDamage(damage);
+
+      if (!victim.isAlive()) turnManager.removeEntity(victim);
+    }
+  }
+
+  getAttackPoints(): number { return getRandomNumber(0, 1); }
 
   onDestroy() {
     dungeonManager.log('monster killed');

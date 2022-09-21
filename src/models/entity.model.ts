@@ -5,8 +5,8 @@ import Position from './position.model';
 type TurnFunction = () => void;
 type OverFunction = () => boolean;
 type RefreshFunction = () => void;
-type MoveEntityToFunction = (_position: Position) => void;
 type AttackFunction = (_victim: Entity) => void;
+type AttackCallbackFunction = (_victim: Entity) => void;
 type GetAttackPointsFunction = () => number;
 type ReceiveDamageFunction = (_damage: number) => void;
 type OnDestroyFunction = () => void;
@@ -31,8 +31,8 @@ export default interface Entity {
   turn: TurnFunction,
   over: OverFunction,
   refresh: RefreshFunction,
-  moveEntityTo: MoveEntityToFunction,
   attack: AttackFunction,
+  attackCallback: AttackCallbackFunction,
   getAttackPoints: GetAttackPointsFunction,
   receiveDamage: ReceiveDamageFunction,
   onDestroy: OnDestroyFunction,

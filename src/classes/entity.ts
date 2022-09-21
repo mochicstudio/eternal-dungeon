@@ -41,28 +41,11 @@ export default class Entity implements EntityModel {
     }
   }
 
-  moveEntityTo(position: Position) {
-    this.isMoving = true;
-    eternalDungeon.tweens.add({
-      targets: this.sprite,
-      onComplete: () => {
-        this.isMoving = false;
-        this.position = {
-          x: position.x,
-          y: position.y
-        }
-      },
-      x: dungeonManager.level.map?.tileToWorldX(position.x),
-      y: dungeonManager.level.map?.tileToWorldY(position.y),
-      ease: 'Power2',
-      duration: 200
-    });
-  }
-
   turn() { }
   over(): boolean { return this.movePoints === 0 && !this.isMoving; }
   refresh() { }
   attack(_victim: EntityModel) { }
+  attackCallback(_victim: EntityModel) { }
   getAttackPoints() { return 0; }
   receiveDamage(damage: number) { this.healthPoints -= damage; }
   onDestroy() { }

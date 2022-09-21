@@ -19,7 +19,7 @@ export default class Skeleton extends Monster {
     if (this.movePoints > 0) {
       const path = this.getPath(previousPosition);
       if (path.length > 2) {
-        this.moveEntityTo({ x: path[2][0], y: path[2][1] });
+        dungeonManager.moveEntityTo(this, { x: path[2][0], y: path[2][1] });
       }
       this.movePoints -= 1;
     }
