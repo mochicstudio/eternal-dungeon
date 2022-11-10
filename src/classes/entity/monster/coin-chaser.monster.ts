@@ -1,8 +1,8 @@
-import { Tile } from "../../enums/tiles.enum";
-import { MonsterType } from "../../enums/monster-type.enum";
-import Position from "../../models/position.model";
+import { Tile } from '../../../enums/tiles.enum';
+import { MonsterType } from '../../../enums/monster-type.enum';
+import Position from '../../../models/position.model';
 import Monster from './monster';
-import { dungeonManager } from "../dungeon-manager";
+import { dungeonManager } from '../../dungeon-manager';
 
 export default class CoinChaser extends Monster {
   constructor() {
@@ -11,7 +11,7 @@ export default class CoinChaser extends Monster {
   }
 
   turn() {
-    let previousPosition: Position = {
+    const previousPosition: Position = {
       x: this.position.x,
       y: this.position.y
     };
@@ -28,7 +28,7 @@ export default class CoinChaser extends Monster {
       if (dungeonManager.player.getItemByProperty('isGold', true)) {
         const path = this.getPath(previousPosition);
         console.log(path.length);
-        this.moveEntityTo({ x: path[3][0], y: path[3][1] });
+        dungeonManager.moveEntityTo(this, { x: path[3][0], y: path[3][1] });
       }
       this.movePoints -= 1;
     }

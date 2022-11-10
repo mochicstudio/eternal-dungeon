@@ -3,17 +3,17 @@ import { Tile } from '../enums/tiles.enum';
 import { dungeonManager } from '../classes/dungeon-manager';
 import { turnManager } from '../classes/turn-manager';
 import { cursors } from '../classes/cursors';
-import Goblin from '../classes/monster/goblin.monster';
-import Skeleton from '../classes/monster/skeleton.monster';
-import Golem from '../classes/monster/golem.monster';
-import CoinChaser from '../classes/monster/coin-chaser.monster';
-import Sword from '../classes/item/weapon/sword.item.weapon';
-import Gem from '../classes/item/gem/gem.item';
-import CoinGem from '../classes/item/gem/coin.item.gem';
-import CursedGem from '../classes/item/gem/cursed.item.gem';
-import UncursedPotion from '../classes/item/potion/uncursed.item.potion';
-import HealthPotion from '../classes/item/potion/health-buster.item.potion';
-import AttackBusterPotion from '../classes/item/potion/attack-buster.item.potion';
+import Goblin from '../classes/entity/monster/goblin.monster';
+import Skeleton from '../classes/entity/monster/skeleton.monster';
+import Golem from '../classes/entity/monster/golem.monster';
+import CoinChaser from '../classes/entity/monster/coin-chaser.monster';
+import Sword from '../classes/entity/item/weapon/sword.item.weapon';
+import Gem from '../classes/entity/item/gem/gem.item';
+import CoinGem from '../classes/entity/item/gem/coin.item.gem';
+import CursedGem from '../classes/entity/item/gem/cursed.item.gem';
+import UncursedPotion from '../classes/entity/item/potion/uncursed.item.potion';
+import HealthPotion from '../classes/entity/item/potion/health-buster.item.potion';
+import AttackBusterPotion from '../classes/entity/item/potion/attack-buster.item.potion';
 import { ui } from './ui.scene';
 
 class EternalDungeon extends Phaser.Scene {
@@ -81,7 +81,7 @@ class EternalDungeon extends Phaser.Scene {
       y: dungeonManager.player.position.y - 1
     }));
 
-    const camera = this.cameras.main
+    const camera = this.cameras.main;
     camera.setViewport(0, 0, camera.worldView.width - 200, camera.worldView.height);
     camera.setBounds(0, 0, camera.worldView.width, camera.worldView.height);
     camera.startFollow(dungeonManager.player.sprite);
@@ -100,7 +100,7 @@ class EternalDungeon extends Phaser.Scene {
 const setInGameBackground = () => {
   document.getElementById('html')?.classList.remove('booting-screen');
   document.getElementById('html')?.classList.add('in-game-screen');
-}
+};
 
 const eternalDungeon = new EternalDungeon();
 export { eternalDungeon };

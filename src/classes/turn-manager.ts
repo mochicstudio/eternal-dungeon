@@ -1,6 +1,5 @@
 import Entity from '../models/entity.model';
-import { dungeonManager } from './dungeon-manager';
-import Item from './item/item';
+import Item from './entity/item/item';
 
 class TurnManager {
   private entities: Set<Entity> = new Set();
@@ -44,7 +43,7 @@ class TurnManager {
 
   refresh() {
     this.currentEntityIndex = 0;
-    this.entities.forEach(entity => entity.isAlive ? entity.refresh() : null);
+    this.entities.forEach(entity => entity.isAlive() ? entity.refresh() : null);
   }
 }
 

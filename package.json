@@ -2,7 +2,7 @@
   "name": "mochicstudio-eternal-dungeon",
   "version": "1.0.0",
   "description": "Eternal Dungeon",
-  "main": "dist/index.js",
+  "main": "eternal-dungeon-build/index.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -26,6 +26,9 @@
     "@types/jest": "^28.1.4",
     "@types/node": "^14.14.27",
     "@types/pathfinding": "0.0.5",
+    "@typescript-eslint/eslint-plugin": "^5.42.1",
+    "@typescript-eslint/parser": "^5.42.1",
+    "eslint": "^8.27.0",
     "jest": "^28.1.2",
     "phaser": "^3.55.2",
     "ts-jest": "^28.0.5",

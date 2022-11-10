@@ -6,7 +6,8 @@ Thumbs.db
 node_modules/
 
 # Build
-dist
+eternal-dungeon-build
+eternal-dungeon.zip
 
 # Test
 coverage/

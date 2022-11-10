@@ -1,8 +1,8 @@
-import { Tile } from "../../enums/tiles.enum";
-import { MonsterType } from "../../enums/monster-type.enum";
-import Position from "../../models/position.model";
+import { Tile } from '../../../enums/tiles.enum';
+import { MonsterType } from '../../../enums/monster-type.enum';
+import Position from '../../../models/position.model';
 import Monster from './monster';
-import { dungeonManager } from "../dungeon-manager";
+import { dungeonManager } from '../../dungeon-manager';
 
 export default class Skeleton extends Monster {
   constructor() {
@@ -11,7 +11,7 @@ export default class Skeleton extends Monster {
   }
 
   turn() {
-    let previousPosition: Position = {
+    const previousPosition: Position = {
       x: this.position.x,
       y: this.position.y
     };
@@ -19,7 +19,7 @@ export default class Skeleton extends Monster {
     if (this.movePoints > 0) {
       const path = this.getPath(previousPosition);
       if (path.length > 2) {
-        this.moveEntityTo({ x: path[2][0], y: path[2][1] });
+        dungeonManager.moveEntityTo(this, { x: path[2][0], y: path[2][1] });
       }
       this.movePoints -= 1;
     }

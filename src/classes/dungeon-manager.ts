@@ -2,7 +2,7 @@ import PF from 'pathfinding';
 import { Tile } from '../enums/tiles.enum';
 import Entity from '../models/entity.model';
 import Position from '../models/position.model';
-import Player from './player';
+import Hero from './entity/hero/hero';
 import Level from './level';
 import { turnManager } from './turn-manager';
 import { eternalDungeon } from '../scenes/eternal-dungeon.scene';
@@ -19,7 +19,7 @@ class DungeonManager {
   output: string[] = [];
 
   addPlayer() {
-    this.player = new Player();
+    this.player = new Hero();
   }
 
   isWalkableTile(position: Position) {
@@ -52,34 +52,33 @@ class DungeonManager {
     else return 0;
   }
 
+  moveEntityTo(entity: Entity, position: Position) {
+    eternalDungeon.tweens.add({
+      targets: entity.sprite,
+      onComplete: () => {
+        entity.position = {
+          x: position.x,
+          y: position.y
+        };
+      },
+      x: dungeonManager.level.map?.tileToWorldX(position.x),
+      y: dungeonManager.level.map?.tileToWorldY(position.y),
+      ease: 'Power2',
+      duration: 200
+    });
+  }
+
   attackEntity(attacker: Entity, victim: Entity) {
-    attacker.isMoving = true;
-    // attacker.tweens = attacker.tweens || 0;
-    // attacker.tweens += 1;
     eternalDungeon.tweens.add({
       targets: attacker.sprite,
-      onComplete: () => {
-        if (attacker.isAlive() && victim.isAlive()) {
-          if (attacker.sprite) {
-            attacker.sprite.x = this.level.map?.tileToWorldX(attacker.position.x) as number;
-            attacker.sprite.y = this.level.map?.tileToWorldY(attacker.position.y) as number;
-          }
-          // attacker.tweens -= 1;
-
-          const damage = attacker.attack();
-          this.log(`${attacker.type} damage done: ${damage} to ${victim.type}`);
-          victim.healthPoints -= damage;
-
-          if (!victim.isAlive()) turnManager.removeEntity(victim);
-        }
-      },
       x: this.level.map?.tileToWorldX(victim.position.x),
       y: this.level.map?.tileToWorldY(victim.position.y),
       ease: 'Power2',
       hold: 20,
       duration: 80,
-      delay: 200,
-      yoyo: true
+      delay: attacker.tweens * 200,
+      yoyo: true,
+      onComplete: () => attacker.attackCallback(victim)
     });
   }
 

@@ -1,0 +1,233 @@
+import { Tile } from '../../../enums/tiles.enum';
+import { EntityType } from '../../../enums/entity-type.enum';
+import Position from '../../../models/position.model';
+import Entity from '../entity';
+import Item from '../item/item';
+import { cursors } from '../../cursors';
+import { dungeonManager } from '../../dungeon-manager';
+import { turnManager } from '../../turn-manager';
+import { ui } from '../../../scenes/ui.scene';
+import { isEntityAMonster, isEntityAnItem } from '../../../helpers/entity-type.helper';
+import { getRandomNumber } from '../../../utils/random-number-generator.util';
+
+export default class Hero extends Entity {
+  uiStatsText!: Phaser.GameObjects.Text;
+  uiItems!: Array<Phaser.GameObjects.Rectangle>;
+  items: Array<Item>;
+  pattern = ['move', 'attack'];
+  nextPosition: Position;
+
+  constructor() {
+    super(15, 15, 1, Tile.playerTile);
+    this.type = EntityType.hero;
+    this.healthPoints = 15;
+    this.items = [];
+    this.nextPosition = { x: this.position.x, y: this.position.y };
+  }
+
+  checkMoveInput() {
+    if (cursors.cursorKeys?.left.isDown) {
+      this.nextPosition.x -= 1;
+      this.setIsMoving();
+    }
+    if (cursors.cursorKeys?.right.isDown) {
+      this.nextPosition.x += 1;
+      this.setIsMoving();
+    }
+    if (cursors.cursorKeys?.down.isDown) {
+      this.nextPosition.y += 1;
+      this.setIsMoving();
+    }
+    if (cursors.cursorKeys?.up.isDown) {
+      this.nextPosition.y -= 1;
+      this.setIsMoving();
+    }
+  }
+
+  move() { dungeonManager.moveEntityTo(this, this.nextPosition); }
+  positionsAreDiferent(): boolean { return this.position.x !== this.nextPosition.x || this.position.y !== this.nextPosition.y; }
+  setIsMoving() { this.isMoving = true; }
+  resetIsMoving() { this.isMoving = false; }
+  resetNextPosition() { this.nextPosition = { x: this.position.x, y: this.position.y }; }
+  hasRemainingMovePoints(): boolean { return this.movePoints > 0; }
+  spendMovePoint() { this.movePoints -= 1; }
+  hasRemainingActionPoints(): boolean { return this.actionPoints > 0; }
+  spendActionPoint() { this.actionPoints -= 1; }
+  addItem(item: Item) { this.items.push(item); }
+
+  turn() {
+    if (this.hasRemainingMovePoints() && !this.isMoving) {
+      this.checkMoveInput();
+      if (this.isMoving) {
+        this.spendMovePoint();
+        if (dungeonManager.isWalkableTile(this.nextPosition) && this.hasRemainingActionPoints()) {
+          const entityAtNextTile = dungeonManager.entityAtTile(this.nextPosition);
+
+          if (entityAtNextTile) {
+            if (isEntityAMonster(entityAtNextTile)) {
+              this.attack(entityAtNextTile);
+              this.spendActionPoint();
+              this.resetNextPosition();
+            } else if (isEntityAnItem(entityAtNextTile)) {
+              this.addItem(entityAtNextTile as Item);
+              this.spendActionPoint();
+              turnManager.itemPicked(entityAtNextTile as Item);
+            }
+          }
+
+          if (this.positionsAreDiferent()) this.move();
+        }
+      }
+
+      if (this.healthPoints <= 5 && this.sprite) this.sprite.tint = Phaser.Display.Color.GetColor(255, 0, 0);
+    }
+
+    this.resetIsMoving();
+    this.refreshUI();
+  }
+
+  over(): boolean {
+    const isOver = this.movePoints === 0 && !this.isMoving;
+
+    if (isOver && this.uiText) {
+      this.uiText.setColor('#CFC6B8');
+    } else {
+      this.uiText.setColor('#FFF');
+    }
+
+    if (this.uiStatsText) {
+      this.uiStatsText.setText(`HP: ${this.healthPoints}\nMP: ${this.movePoints}\nAP: ${this.actionPoints}`);
+    }
+
+    return isOver;
+  }
+
+  refresh() {
+    this.movePoints = this.restorePoints;
+    this.actionPoints = 1;
+  }
+
+  attack(victim: Entity) {
+    this.setIsMoving();
+    this.tweens = this.tweens || 0;
+    this.tweens += 1;
+    dungeonManager.attackEntity(this, victim);
+  }
+
+  attackCallback(victim: Entity) {
+    if (this.isAlive() && victim.isAlive()) {
+      if (this.sprite) {
+        this.sprite.x = dungeonManager.level.map?.tileToWorldX(this.position.x) as number;
+        this.sprite.y = dungeonManager.level.map?.tileToWorldY(this.position.y) as number;
+      }
+      this.tweens -= 1;
+
+      const damage = this.getAttackPoints();
+      dungeonManager.log(`${this.type} damage done: ${damage} to ${victim.type}`);
+      victim.receiveDamage(damage);
+
+      if (!victim.isAlive()) turnManager.removeEntity(victim);
+    }
+  }
+
+  getAttackPoints() { return this.equippedItems().reduce((total, item) => total + item.damage(), getRandomNumber(1, 5)); }
+  receiveDamage(damage: number) { this.healthPoints -= damage; }
+
+  toggleItem(slot: number) {
+    const item = this.items[slot];
+
+    if (item) {
+      if (item.weapon) {
+        this.items.forEach(i => i.active = i.weapon ? false : i.active);
+      }
+      item.active = !item.active;
+      if (item.active) {
+        dungeonManager.log(`${this.type} equips ${item.name} : ${item.description}.`);
+        item.equip(slot);
+      }
+    }
+  }
+
+  removeItem(slot: number) {
+    const specificItem = this.items[slot];
+
+    if (specificItem) {
+      this.items.forEach(item => { if (item === specificItem) item.uiSprite.destroy(); });
+      this.items = this.items.filter(item => item !== specificItem);
+      this.refreshUI();
+    }
+  }
+
+  removeItemByProperty(property: string, value: any) {
+    this.items.filter(item => item[property as keyof typeof item] === value).forEach(item => item.uiSprite.destroy());
+    this.items = this.items.filter(item => item[property as keyof typeof item] !== value);
+    this.refreshUI();
+  }
+
+  getItemByProperty(property: string, value: any) {
+    return this.items.filter(item => item[property as keyof typeof item] === value)[0];
+  }
+
+  equippedItems() { return this.items.filter(item => item.active); }
+
+  onDestroy() {
+    dungeonManager.log('you died');
+
+    if (window.confirm('Do want to play again?')) {
+      window.location.reload();
+    }
+  }
+
+  renderUI(position: Position, width?: number): number {
+    let accumulatedHeight = 0;
+
+    this.uiSprite = ui.add.sprite(position.x, position.y, 'world', this.spriteTile).setOrigin(0);
+    this.uiText = ui.add.text(position.x + 20, position.y, this.type, { font: '16px Arial', color: '#CFC6B8' });
+    this.uiStatsText = ui.add.text(position.x + 20, position.y + 20, `HP: ${this.healthPoints}\nMP: ${this.movePoints}\nAP: ${this.actionPoints}`, { font: '12px Arial', color: '#CFC6B8' });
+
+    accumulatedHeight += this.uiStatsText.height + this.uiSprite.height + 90;
+
+    this.renderItemSlots(position);
+
+    ui.add.line(position.x + 5, position.y + 120, 0, 10, 175, 10, 0xcfc6b8).setOrigin(0);
+
+    return accumulatedHeight;
+  }
+
+  refreshUI() {
+    this.items.forEach((item: Item, index) => {
+      const MARGIN = 10;
+
+      if (!item.uiSprite) {
+        const position: Position = {
+          x: this.uiItems[index].x + MARGIN,
+          y: this.uiItems[index].y + MARGIN
+        };
+        item.uiSprite = ui.add.sprite(position.x, position.y, 'world', item.tile);
+      }
+
+      if (item.active) {
+        item.uiSprite.setAlpha(0.5);
+        this.uiItems[index].setStrokeStyle();
+      } else {
+        item.uiSprite.setAlpha(1);
+        this.uiItems[index].setStrokeStyle(1, 0xffffff);
+      }
+    });
+  }
+
+  renderItemSlots(position: Position) {
+    const itemsPerRow = 5;
+    const rows = 2;
+    this.uiItems = [];
+    for (let row = 1; row <= rows; row++) {
+      for (let cell = 1; cell <= itemsPerRow; cell++) {
+        const rx = position.x + (25 * cell);
+        const ry = position.y + 50 + (25 * row);
+        this.uiItems.push(
+          ui.add.rectangle(rx, ry, 20, 20, 0xcfc6b8, 0.3).setOrigin(0)
+        );
+      }
+    }
+  }
+}

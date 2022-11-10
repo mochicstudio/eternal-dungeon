@@ -34,7 +34,7 @@ class MochichStudioLogo extends Phaser.Scene {
   onCompleteHandler() { this.scene.start(eternalDungeon); }
 }
 
-const setBootingBackground = () => { document.getElementById('html')?.classList.add('booting-screen'); }
+const setBootingBackground = () => { document.getElementById('html')?.classList.add('booting-screen'); };
 
 const mochicStudioLogo = new MochichStudioLogo();
 export { mochicStudioLogo };

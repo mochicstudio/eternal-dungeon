@@ -24,7 +24,7 @@ class UI extends Phaser.Scene {
       y: 10
     };
 
-    for (let entity of turnManager.getEntitiesValues()) {
+    for (const entity of turnManager.getEntitiesValues()) {
       entity as Entity;
       if (typeof entity.renderUI === 'function') {
         const height = entity.renderUI(position, 198);

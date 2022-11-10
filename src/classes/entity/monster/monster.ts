@@ -1,15 +1,15 @@
 import PF from 'pathfinding';
-import { EntityType } from './../../enums/entity-type.enum';
-import { MonsterType } from '../../enums/monster-type.enum';
-import Position from '../../models/position.model';
+import { EntityType } from './../../../enums/entity-type.enum';
+import { MonsterType } from '../../../enums/monster-type.enum';
+import Position from '../../../models/position.model';
 import Entity from '../entity';
 import Gem from '../item/gem/gem.item';
 import CursedGem from '../item/gem/cursed.item.gem';
 import LongSword from '../item/weapon/long-sword.item.weapon';
-import { dungeonManager } from '../dungeon-manager';
-import { ui } from '../../scenes/ui.scene';
-import { getRandomNumber } from '../../utils/random-number-generator.util';
-import { turnManager } from '../turn-manager';
+import { dungeonManager } from '../../dungeon-manager';
+import { ui } from '../../../scenes/ui.scene';
+import { getRandomNumber } from '../../../utils/random-number-generator.util';
+import { turnManager } from '../../turn-manager';
 
 export default class Monster extends Entity {
   readonly lootPosibilities = [null, null, Gem, CursedGem, LongSword];
@@ -21,7 +21,7 @@ export default class Monster extends Entity {
   }
 
   turn() {
-    let previousPosition: Position = {
+    const previousPosition: Position = {
       x: this.position.x,
       y: this.position.y
     };
@@ -29,13 +29,13 @@ export default class Monster extends Entity {
     if (this.movePoints > 0) {
       const path = this.getPath(previousPosition);
       if (path.length > 2) {
-        this.moveEntityTo({ x: path[1][0], y: path[1][1] });
+        dungeonManager.moveEntityTo(this, { x: path[1][0], y: path[1][1] });
       }
       this.movePoints -= 1;
     }
 
     if (this.actionPoints > 0 && this.isPlayerReachable()) {
-      dungeonManager.attackEntity(this, dungeonManager.player);
+      this.attack(dungeonManager.player);
       this.actionPoints = 0;
     }
 
@@ -59,7 +59,31 @@ export default class Monster extends Entity {
     this.actionPoints = 1;
   }
 
-  attack() { return getRandomNumber(2, 3); }
+  attack(victim: Entity) {
+    console.log('attack');
+    this.isMoving = true;
+    this.tweens = this.tweens || 0;
+    this.tweens += 1;
+    dungeonManager.attackEntity(this, victim);
+  }
+
+  attackCallback(victim: Entity) {
+    if (this.isAlive() && victim.isAlive()) {
+      if (this.sprite) {
+        this.sprite.x = dungeonManager.level.map?.tileToWorldX(this.position.x) as number;
+        this.sprite.y = dungeonManager.level.map?.tileToWorldY(this.position.y) as number;
+      }
+      this.tweens -= 1;
+
+      const damage = this.getAttackPoints();
+      dungeonManager.log(`${this.type} damage done: ${damage} to ${victim.type}`);
+      victim.receiveDamage(damage);
+
+      if (!victim.isAlive()) turnManager.removeEntity(victim);
+    }
+  }
+
+  getAttackPoints(): number { return getRandomNumber(0, 1); }
 
   onDestroy() {
     dungeonManager.log('monster killed');
