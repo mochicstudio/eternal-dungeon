@@ -1,15 +1,15 @@
 import PF from 'pathfinding';
-import { EntityType } from './../../enums/entity-type.enum';
-import { MonsterType } from '../../enums/monster-type.enum';
-import Position from '../../models/position.model';
+import { EntityType } from './../../../enums/entity-type.enum';
+import { MonsterType } from '../../../enums/monster-type.enum';
+import Position from '../../../models/position.model';
 import Entity from '../entity';
 import Gem from '../item/gem/gem.item';
 import CursedGem from '../item/gem/cursed.item.gem';
 import LongSword from '../item/weapon/long-sword.item.weapon';
-import { dungeonManager } from '../dungeon-manager';
-import { ui } from '../../scenes/ui.scene';
-import { getRandomNumber } from '../../utils/random-number-generator.util';
-import { turnManager } from '../turn-manager';
+import { dungeonManager } from '../../dungeon-manager';
+import { ui } from '../../../scenes/ui.scene';
+import { getRandomNumber } from '../../../utils/random-number-generator.util';
+import { turnManager } from '../../turn-manager';
 
 export default class Monster extends Entity {
   readonly lootPosibilities = [null, null, Gem, CursedGem, LongSword];
@@ -21,7 +21,7 @@ export default class Monster extends Entity {
   }
 
   turn() {
-    let previousPosition: Position = {
+    const previousPosition: Position = {
       x: this.position.x,
       y: this.position.y
     };

@@ -1,4 +1,6 @@
-export default interface SpritesLevel {
+interface SpritesLevel {
   wall: number;
   floor: number;
 }
+
+export default SpritesLevel;

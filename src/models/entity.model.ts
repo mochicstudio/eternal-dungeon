@@ -1,5 +1,5 @@
 import { EntityType } from '../enums/entity-type.enum';
-import Item from '../classes/item/item';
+import Item from '../classes/entity/item/item';
 import Position from './position.model';
 
 type TurnFunction = () => void;
@@ -13,7 +13,7 @@ type OnDestroyFunction = () => void;
 type IsAliveFunction = () => boolean;
 type RenderUIFunction = (_position: Position, _width: number) => number;
 
-export default interface Entity {
+interface Entity {
   position: { x: number, y: number },
   isMoving: boolean;
   movePoints: number,
@@ -39,3 +39,5 @@ export default interface Entity {
   isAlive: IsAliveFunction,
   renderUI: RenderUIFunction
 }
+
+export default Entity; 

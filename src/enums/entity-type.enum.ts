@@ -1,5 +1,5 @@
 export enum EntityType {
-  player = 'player',
+  hero = 'hero',
   monster = 'monster',
   item = 'item'
 };

@@ -1,8 +1,8 @@
-import EntityModel from '../models/entity.model';
-import Position from '../models/position.model';
-import { dungeonManager } from './dungeon-manager';
-import { eternalDungeon } from '../scenes/eternal-dungeon.scene';
-import { EntityType } from '../enums/entity-type.enum';
+import EntityModel from '../../models/entity.model';
+import Position from '../../models/position.model';
+import { dungeonManager } from '../dungeon-manager';
+import { eternalDungeon } from '../../scenes/eternal-dungeon.scene';
+import { EntityType } from '../../enums/entity-type.enum';
 
 export default class Entity implements EntityModel {
   position: Position;
@@ -41,14 +41,14 @@ export default class Entity implements EntityModel {
     }
   }
 
-  turn() { }
+  turn() { return; }
   over(): boolean { return this.movePoints === 0 && !this.isMoving; }
-  refresh() { }
-  attack(_victim: EntityModel) { }
-  attackCallback(_victim: EntityModel) { }
+  refresh() { return; }
+  attack(_victim: EntityModel) { return; }
+  attackCallback(_victim: EntityModel) { return; }
   getAttackPoints() { return 0; }
   receiveDamage(damage: number) { this.healthPoints -= damage; }
-  onDestroy() { }
+  onDestroy() { return; }
   isAlive(): boolean { return this.healthPoints > 0; }
   renderUI(_position: Position, _width?: number) { return 0; }
 }

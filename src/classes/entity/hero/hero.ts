@@ -1,16 +1,16 @@
-import { Tile } from '../enums/tiles.enum';
-import { EntityType } from '../enums/entity-type.enum';
-import Position from '../models/position.model';
-import Entity from './entity';
-import Item from './item/item';
-import { cursors } from './cursors';
-import { dungeonManager } from './dungeon-manager';
-import { turnManager } from './turn-manager';
-import { ui } from '../scenes/ui.scene';
-import { isEntityAMonster, isEntityAnItem } from '../helpers/entity-type.helper';
-import { getRandomNumber } from '../utils/random-number-generator.util';
+import { Tile } from '../../../enums/tiles.enum';
+import { EntityType } from '../../../enums/entity-type.enum';
+import Position from '../../../models/position.model';
+import Entity from '../entity';
+import Item from '../item/item';
+import { cursors } from '../../cursors';
+import { dungeonManager } from '../../dungeon-manager';
+import { turnManager } from '../../turn-manager';
+import { ui } from '../../../scenes/ui.scene';
+import { isEntityAMonster, isEntityAnItem } from '../../../helpers/entity-type.helper';
+import { getRandomNumber } from '../../../utils/random-number-generator.util';
 
-export default class Player extends Entity {
+export default class Hero extends Entity {
   uiStatsText!: Phaser.GameObjects.Text;
   uiItems!: Array<Phaser.GameObjects.Rectangle>;
   items: Array<Item>;
@@ -19,7 +19,7 @@ export default class Player extends Entity {
 
   constructor() {
     super(15, 15, 1, Tile.playerTile);
-    this.type = EntityType.player;
+    this.type = EntityType.hero;
     this.healthPoints = 15;
     this.items = [];
     this.nextPosition = { x: this.position.x, y: this.position.y };
@@ -87,7 +87,7 @@ export default class Player extends Entity {
   }
 
   over(): boolean {
-    let isOver = this.movePoints === 0 && !this.isMoving;
+    const isOver = this.movePoints === 0 && !this.isMoving;
 
     if (isOver && this.uiText) {
       this.uiText.setColor('#CFC6B8');
@@ -152,7 +152,7 @@ export default class Player extends Entity {
     const specificItem = this.items[slot];
 
     if (specificItem) {
-      this.items.forEach(item => { if (item === specificItem) item.uiSprite.destroy() });
+      this.items.forEach(item => { if (item === specificItem) item.uiSprite.destroy(); });
       this.items = this.items.filter(item => item !== specificItem);
       this.refreshUI();
     }
@@ -199,10 +199,10 @@ export default class Player extends Entity {
       const MARGIN = 10;
 
       if (!item.uiSprite) {
-        let position: Position = {
+        const position: Position = {
           x: this.uiItems[index].x + MARGIN,
           y: this.uiItems[index].y + MARGIN
-        }
+        };
         item.uiSprite = ui.add.sprite(position.x, position.y, 'world', item.tile);
       }
 
@@ -217,13 +217,13 @@ export default class Player extends Entity {
   }
 
   renderItemSlots(position: Position) {
-    let itemsPerRow = 5
-    let rows = 2
-    this.uiItems = []
+    const itemsPerRow = 5;
+    const rows = 2;
+    this.uiItems = [];
     for (let row = 1; row <= rows; row++) {
       for (let cell = 1; cell <= itemsPerRow; cell++) {
-        let rx = position.x + (25 * cell)
-        let ry = position.y + 50 + (25 * row)
+        const rx = position.x + (25 * cell);
+        const ry = position.y + 50 + (25 * row);
         this.uiItems.push(
           ui.add.rectangle(rx, ry, 20, 20, 0xcfc6b8, 0.3).setOrigin(0)
         );

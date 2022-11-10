@@ -1,6 +1,6 @@
-import { Tile } from '../../../enums/tiles.enum';
-import Position from '../../../models/position.model';
-import { dungeonManager } from '../../dungeon-manager';
+import { Tile } from '../../../../enums/tiles.enum';
+import Position from '../../../../models/position.model';
+import { dungeonManager } from '../../../dungeon-manager';
 import Item from '../item';
 
 export default class HealthPotion extends Item {

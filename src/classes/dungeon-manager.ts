@@ -2,7 +2,7 @@ import PF from 'pathfinding';
 import { Tile } from '../enums/tiles.enum';
 import Entity from '../models/entity.model';
 import Position from '../models/position.model';
-import Player from './player';
+import Hero from './entity/hero/hero';
 import Level from './level';
 import { turnManager } from './turn-manager';
 import { eternalDungeon } from '../scenes/eternal-dungeon.scene';
@@ -19,7 +19,7 @@ class DungeonManager {
   output: string[] = [];
 
   addPlayer() {
-    this.player = new Player();
+    this.player = new Hero();
   }
 
   isWalkableTile(position: Position) {
@@ -59,7 +59,7 @@ class DungeonManager {
         entity.position = {
           x: position.x,
           y: position.y
-        }
+        };
       },
       x: dungeonManager.level.map?.tileToWorldX(position.x),
       y: dungeonManager.level.map?.tileToWorldY(position.y),

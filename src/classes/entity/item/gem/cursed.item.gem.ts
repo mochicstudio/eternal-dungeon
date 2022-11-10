@@ -1,8 +1,8 @@
-import { Tile } from '../../../enums/tiles.enum';
-import Position from '../../../models/position.model';
+import { Tile } from '../../../../enums/tiles.enum';
+import Position from '../../../../models/position.model';
 import Item from '../item';
-import { turnManager } from '../../turn-manager';
-import { dungeonManager } from '../../dungeon-manager';
+import { turnManager } from '../../../turn-manager';
+import { dungeonManager } from '../../../dungeon-manager';
 
 export default class CursedGem extends Item {
   cursed: boolean;
@@ -26,7 +26,7 @@ export default class CursedGem extends Item {
     this.actionPoints = 0;
 
     if (!dungeonManager.player.isAlive()) turnManager.removeEntity(dungeonManager.player);
-  }
+  };
 
   refresh = () => this.actionPoints = 1;
   over = () => this.actionPoints === 0;

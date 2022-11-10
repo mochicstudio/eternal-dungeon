@@ -1,6 +1,6 @@
-import { Tile } from '../../../enums/tiles.enum';
-import Position from '../../../models/position.model';
-import { dungeonManager } from '../../dungeon-manager';
+import { Tile } from '../../../../enums/tiles.enum';
+import Position from '../../../../models/position.model';
+import { dungeonManager } from '../../../dungeon-manager';
 import Item from '../item';
 
 export default class AttackBusterPotion extends Item {
@@ -24,7 +24,7 @@ export default class AttackBusterPotion extends Item {
     }
 
     this.actionPoints = 0;
-  }
+  };
 
   equip(itemKey: number) {
     dungeonManager.log('A blessing passes through your body and gives you strength');
