@@ -61,6 +61,7 @@ export default class Hero extends Entity {
 
     if (isOver && this.uiText) {
       this.uiText.setColor('#CFC6B8');
+      this.flushActionPoints();
     } else {
       this.uiText.setColor('#FFF');
     }
@@ -78,6 +79,10 @@ export default class Hero extends Entity {
   }
 
   checkMoveInput() {
+    if (cursors.cursorKeys?.space.isDown) {
+      this.flushMovePoints();
+      return;
+    }
     if (cursors.cursorKeys?.left.isDown) {
       this.nextPosition.x -= 1;
       this.setIsMoving();
@@ -96,6 +101,30 @@ export default class Hero extends Entity {
     }
   }
 
+  checkItemInput(event: KeyboardEvent) {
+    if (!this.over()) {
+      const eventKey = event.key;
+      if (!isNaN(Number(eventKey))) {
+        let key = Number(eventKey);
+        if (key === 0) key = 10;
+        this.toggleItem(key - 1);
+      }
+    }
+  }
+
+  checkRangeAttackInput(event: Phaser.Input.Pointer) {
+    if (!this.over()) {
+      const position: Position = {
+        x: dungeonManager.level.map.worldToTileX(event.worldX),
+        y: dungeonManager.level.map.worldToTileY(event.worldY)
+      };
+      const entity = dungeonManager.entityAtTile(position);
+      if (entity && entity.type === EntityType.monster && this.actionPoints) {
+        // TODO: Make a range weapon to implement range attack logic
+      }
+    }
+  }
+
   move() { dungeonManager.moveEntityTo(this, this.nextPosition); }
   positionsAreDifferent(): boolean { return this.position.x !== this.nextPosition.x || this.position.y !== this.nextPosition.y; }
   setIsMoving() { this.isMoving = true; }
@@ -103,9 +132,12 @@ export default class Hero extends Entity {
   resetNextPosition() { this.nextPosition = { x: this.position.x, y: this.position.y }; }
   hasRemainingMovePoints(): boolean { return this.movePoints > 0; }
   spendMovePoint() { this.movePoints -= 1; }
+  flushMovePoints() { this.movePoints = 0; }
+  flushActionPoints() { this.actionPoints = 0; }
   hasRemainingActionPoints(): boolean { return this.actionPoints > 0; }
   spendActionPoint() { this.actionPoints -= 1; }
   addItem(item: Item) { this.items.push(item); }
+  getCurrentActiveWeapon() { return this.items.filter(item => item.active && item.weapon)[0]; }
 
   attack(victim: Entity) {
     this.setIsMoving();

@@ -32,16 +32,7 @@ class EternalDungeon extends Phaser.Scene {
   }
 
   init() {
-    cursors.setCursorKeys(this.input.keyboard.createCursorKeys());
-
-    this.input.keyboard.on('keyup', (event: any) => {
-      let key = event.key;
-
-      if (!isNaN(Number(key))) {
-        if (key === 0) key = 10;
-        dungeonManager.player.toggleItem(key - 1);
-      }
-    });
+    this.setInputListeners();
   }
 
   create() {
@@ -94,6 +85,12 @@ class EternalDungeon extends Phaser.Scene {
       turnManager.refresh();
     }
     turnManager.turn();
+  }
+
+  setInputListeners() {
+    cursors.setCursorKeys(this.input.keyboard.createCursorKeys());
+    this.input.keyboard.on('keyup', (event: KeyboardEvent) => dungeonManager.player.checkItemInput(event));
+    this.input.on('pointerup', (event: Phaser.Input.Pointer) => dungeonManager.player.checkRangeAttackInput(event));
   }
 }
 
