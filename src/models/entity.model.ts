@@ -1,33 +1,33 @@
 import { EntityType } from '../enums/entity-type.enum';
-import Item from '../classes/entity/item/item';
 import Position from './position.model';
+import Item from '../classes/entity/item/item';
 
 type TurnFunction = () => void;
 type OverFunction = () => boolean;
 type RefreshFunction = () => void;
-type AttackFunction = (_victim: Entity) => void;
-type AttackCallbackFunction = (_victim: Entity) => void;
+type AttackFunction = (victim: Entity) => void;
+type AttackCallbackFunction = (victim: Entity) => void;
 type GetAttackPointsFunction = () => number;
-type ReceiveDamageFunction = (_damage: number) => void;
+type ReceiveDamageFunction = (damage: number) => void;
 type OnDestroyFunction = () => void;
 type IsAliveFunction = () => boolean;
-type RenderUIFunction = (_position: Position, _width: number) => number;
+type RenderUIFunction = (position: Position, width: number) => number;
 
 interface Entity {
-  position: { x: number, y: number },
-  isMoving: boolean;
-  movePoints: number,
-  restorePoints: number,
+  position: Position,
   positionInWorld: Position;
-  actionPoints: number,
-  healthPoints: number,
+  items: Array<Item>,
   type: EntityType,
-  items?: Array<Item>,
-  spriteTile: number,
-  sprite?: Phaser.GameObjects.Sprite,
-  tweens: number,
+  sprite: Phaser.GameObjects.Sprite,
   uiSprite: Phaser.GameObjects.Sprite,
   uiText: Phaser.GameObjects.Text,
+  movePoints: number,
+  restorePoints: number,
+  actionPoints: number,
+  healthPoints: number,
+  spriteTile: number,
+  tweens: number,
+  isMoving: boolean;
   turn: TurnFunction,
   over: OverFunction,
   refresh: RefreshFunction,
