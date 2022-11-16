@@ -3,21 +3,23 @@ import Position from '../../models/position.model';
 import { dungeonManager } from '../dungeon-manager';
 import { eternalDungeon } from '../../scenes/eternal-dungeon.scene';
 import { EntityType } from '../../enums/entity-type.enum';
+import Item from './item/item';
 
 export default class Entity implements EntityModel {
-  position: Position;
-  positionInWorld: Position;
-  isMoving: boolean;
+  readonly position: Position;
+  readonly positionInWorld: Position;
+  readonly items!: Array<Item>;
+  type!: EntityType;
+  sprite!: Phaser.GameObjects.Sprite;
+  uiSprite!: Phaser.GameObjects.Sprite;
+  uiText!: Phaser.GameObjects.Text;
   movePoints: number;
   restorePoints: number;
   actionPoints: number;
   healthPoints: number;
   spriteTile: number;
   tweens: number;
-  type!: EntityType;
-  sprite?: Phaser.GameObjects.Sprite;
-  uiSprite!: Phaser.GameObjects.Sprite;
-  uiText!: Phaser.GameObjects.Text;
+  isMoving: boolean;
 
   constructor(positionX: number, positionY: number, movePoints: number, spriteTile: number) {
     this.position = { x: 0, y: 0 };

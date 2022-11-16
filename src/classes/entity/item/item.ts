@@ -12,20 +12,20 @@ export default class Item extends Entity {
   constructor(position: Position, spriteTile: number) {
     super(position.x, position.y, 0, spriteTile);
 
-    this.active = false;
     this.type = EntityType.item;
+    this.active = false;
     this.weapon = false;
     this.name = 'no name';
     this.description = 'no description';
   }
 
-  damage = () => 0;
-  proection() { return 0; }
-  range() { return 0; }
   turn() { return; }
-  equip(itemKey: number) { return; }
-  unequip() { return; }
+  over() { return true; }
   refresh() { return; }
-  over = () => true;
   renderUI = () => 0;
+  damage = () => 0;
+  proection = () => 0;
+  range = () => 0;
+  equip = (_itemKey: number) => { return; };
+  unequip = () => { return; };
 }
