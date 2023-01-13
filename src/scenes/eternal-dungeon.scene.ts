@@ -15,6 +15,7 @@ import UncursedPotion from '../classes/entity/item/potion/uncursed.item.potion';
 import HealthPotion from '../classes/entity/item/potion/health-buster.item.potion';
 import AttackBusterPotion from '../classes/entity/item/potion/attack-buster.item.potion';
 import { ui } from './ui.scene';
+import { setInGameBackground } from '../helpers/css.helper.ts';
 
 class EternalDungeon extends Phaser.Scene {
   constructor() {
@@ -93,11 +94,6 @@ class EternalDungeon extends Phaser.Scene {
     this.input.on('pointerup', (event: Phaser.Input.Pointer) => dungeonManager.player.checkRangeAttackInput(event));
   }
 }
-
-const setInGameBackground = () => {
-  document.getElementById('html')?.classList.remove('booting-screen');
-  document.getElementById('html')?.classList.add('in-game-screen');
-};
 
 const eternalDungeon = new EternalDungeon();
 export { eternalDungeon };
