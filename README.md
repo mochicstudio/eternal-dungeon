@@ -10,8 +10,8 @@
 
 ## Development
 ```sh
-node -v -> 18.7.0
-npm -v -> 8.15.0
+node -v -> 18.15.0
+npm -v -> 9.5.0
 ```
 After cloning the repo, run `npm install` from your project directory. Then, you can start the local development
 server by running `npm run dev` and navigate to <http://localhost:3000>.
