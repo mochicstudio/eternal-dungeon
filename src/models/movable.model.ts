@@ -1,4 +1,4 @@
-import { Position } from './position.model.ts';
+import Position from './position.model';
 
 interface Movable {
   position: Position,

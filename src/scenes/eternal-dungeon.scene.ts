@@ -15,7 +15,7 @@ import UncursedPotion from '../classes/entity/item/potion/uncursed.item.potion';
 import HealthPotion from '../classes/entity/item/potion/health-buster.item.potion';
 import AttackBusterPotion from '../classes/entity/item/potion/attack-buster.item.potion';
 import { ui } from './ui.scene';
-import { setInGameBackground } from '../helpers/css.helper.ts';
+import { setInGameBackground } from '../helpers/css.helper';
 
 class EternalDungeon extends Phaser.Scene {
   constructor() {
