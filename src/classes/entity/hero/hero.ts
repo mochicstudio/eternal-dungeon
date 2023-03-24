@@ -1,8 +1,16 @@
-import { Tile } from '../../../enums/tiles.enum';
-import { EntityType } from '../../../enums/entity-type.enum';
-import Position from '../../../models/position.model';
 import Entity from '../entity';
 import Item from '../item/item';
+import { Tile } from '../../../enums/tiles.enum';
+import { EntityType } from '../../../enums/entity-type.enum';
+import Actionable from '../../../models/entity/actionable.model';
+import Animate from '../../../models/entity/animate.model';
+import CanAttack from '../../../models/entity/can-attack.model';
+import CanBeDamaed from '../../../models/entity/can-be-damaged.model';
+import Destroyable from '../../../models/entity/destroyable.model';
+import HasItems from '../../../models/entity/has-items.model';
+import HasPosition from '../../../models/entity/has-position.model';
+import HasUI from '../../../models/entity/has-ui.model';
+import Movable from '../../../models/entity/movable.model';
 import { cursors } from '../../cursors';
 import { dungeonManager } from '../../dungeon-manager';
 import { turnManager } from '../../turn-manager';
@@ -10,19 +18,37 @@ import { ui } from '../../../scenes/ui.scene';
 import { isEntityAMonster, isEntityAnItem } from '../../../helpers/entity-type.helper';
 import { getRandomNumber } from '../../../utils/random-number-generator.util';
 
-export default class Hero extends Entity {
+export default class Hero extends Entity implements Actionable, Alive, Animate,
+  CanAttack, CanBeDamaed, Destroyable, HasItems, HasPosition, HasUI, Movable {
+  actionPoints: number;
+  restoreActionPoints: number;
+  tweens: number;
+  healthPoints: number;
+  items: Array<Item>;
+  position: Position;
+  positionInWorld: Position;
+  uiSprite!: Phaser.GameObjects.Sprite;
+  uiText!: Phaser.GameObjects.Text;
   uiStatsText!: Phaser.GameObjects.Text;
   uiItems!: Array<Phaser.GameObjects.Rectangle>;
-  items: Array<Item>;
   pattern = ['move', 'attack'];
   nextPosition: Position;
 
-  constructor() {
-    super(15, 15, 1, Tile.playerTile);
+  constructor(x: number, y: number) {
+    super(Tile.playerTile);
+
     this.type = EntityType.hero;
+    this.actionPoints = 1;
+    this.restoreActionPoints = this.actionPoints;
+    this.tweens = 1;
     this.healthPoints = 15;
     this.items = [];
-    this.nextPosition = { x: this.position.x, y: this.position.y };
+    this.position = { x, y };
+    this.positionInWorld = {
+      x: dungeonManager.level.map?.tileToWorldX(x) as number,
+      y: dungeonManager.level.map?.tileToWorldY(y) as number
+    };
+    this.nextPosition = { x, y };
   }
 
   turn() {
@@ -76,6 +102,63 @@ export default class Hero extends Entity {
   refresh() {
     this.movePoints = this.restorePoints;
     this.actionPoints = 1;
+  }
+
+  isAlive(): boolean {
+    return this.healthPoints > 0;
+  }
+
+  attack(victim: Entity): boolean {
+    this.setIsMoving();
+    this.tweens = this.tweens || 0;
+    this.tweens += 1;
+    dungeonManager.attackEntity(this, victim);
+    return true;
+  }
+  
+  attackCallback(victim: Entity): boolean {
+    if (this.isAlive() && victim.isAlive()) {
+      if (this.sprite) {
+        this.sprite.x = dungeonManager.level.map?.tileToWorldX(this.position.x) as number;
+        this.sprite.y = dungeonManager.level.map?.tileToWorldY(this.position.y) as number;
+      }
+      this.tweens -= 1;
+
+      const damage = this.getAttackPoints();
+      dungeonManager.log(`${this.type} damage done: ${damage} to ${victim.type}`);
+      victim.receiveDamage(damage);
+
+      if (!victim.isAlive()) turnManager.removeEntity(victim);
+    }
+    return true;
+  }
+  
+  getAttackPoints() { return this.equippedItems().reduce((total, item) => total + item.damage(), getRandomNumber(1, 5)); }
+
+  receiveDamage(damage: number) { this.healthPoints -= damage; }
+
+  onDestroy() {
+    dungeonManager.log('you died');
+
+    if (window.confirm('Do want to play again?')) {
+      window.location.reload();
+    }
+  }
+  
+  renderUI(position: Position, width?: number): number {
+    let accumulatedHeight = 0;
+
+    this.uiSprite = ui.add.sprite(position.x, position.y, 'world', this.spriteTile).setOrigin(0);
+    this.uiText = ui.add.text(position.x + 20, position.y, this.type, { font: '16px Arial', color: '#CFC6B8' });
+    this.uiStatsText = ui.add.text(position.x + 20, position.y + 20, `HP: ${this.healthPoints}\nMP: ${this.movePoints}\nAP: ${this.actionPoints}`, { font: '12px Arial', color: '#CFC6B8' });
+
+    accumulatedHeight += this.uiStatsText.height + this.uiSprite.height + 90;
+
+    this.renderItemSlots(position);
+
+    ui.add.line(position.x + 5, position.y + 120, 0, 10, 175, 10, 0xcfc6b8).setOrigin(0);
+
+    return accumulatedHeight;
   }
 
   checkMoveInput() {
@@ -139,32 +222,6 @@ export default class Hero extends Entity {
   addItem(item: Item) { this.items.push(item); }
   getCurrentActiveWeapon() { return this.items.filter(item => item.active && item.weapon)[0]; }
 
-  attack(victim: Entity) {
-    this.setIsMoving();
-    this.tweens = this.tweens || 0;
-    this.tweens += 1;
-    dungeonManager.attackEntity(this, victim);
-  }
-
-  attackCallback(victim: Entity) {
-    if (this.isAlive() && victim.isAlive()) {
-      if (this.sprite) {
-        this.sprite.x = dungeonManager.level.map?.tileToWorldX(this.position.x) as number;
-        this.sprite.y = dungeonManager.level.map?.tileToWorldY(this.position.y) as number;
-      }
-      this.tweens -= 1;
-
-      const damage = this.getAttackPoints();
-      dungeonManager.log(`${this.type} damage done: ${damage} to ${victim.type}`);
-      victim.receiveDamage(damage);
-
-      if (!victim.isAlive()) turnManager.removeEntity(victim);
-    }
-  }
-
-  getAttackPoints() { return this.equippedItems().reduce((total, item) => total + item.damage(), getRandomNumber(1, 5)); }
-  receiveDamage(damage: number) { this.healthPoints -= damage; }
-
   toggleItem(slot: number) {
     const item = this.items[slot];
 
@@ -201,30 +258,6 @@ export default class Hero extends Entity {
   }
 
   equippedItems() { return this.items.filter(item => item.active); }
-
-  onDestroy() {
-    dungeonManager.log('you died');
-
-    if (window.confirm('Do want to play again?')) {
-      window.location.reload();
-    }
-  }
-
-  renderUI(position: Position, width?: number): number {
-    let accumulatedHeight = 0;
-
-    this.uiSprite = ui.add.sprite(position.x, position.y, 'world', this.spriteTile).setOrigin(0);
-    this.uiText = ui.add.text(position.x + 20, position.y, this.type, { font: '16px Arial', color: '#CFC6B8' });
-    this.uiStatsText = ui.add.text(position.x + 20, position.y + 20, `HP: ${this.healthPoints}\nMP: ${this.movePoints}\nAP: ${this.actionPoints}`, { font: '12px Arial', color: '#CFC6B8' });
-
-    accumulatedHeight += this.uiStatsText.height + this.uiSprite.height + 90;
-
-    this.renderItemSlots(position);
-
-    ui.add.line(position.x + 5, position.y + 120, 0, 10, 175, 10, 0xcfc6b8).setOrigin(0);
-
-    return accumulatedHeight;
-  }
 
   refreshUI() {
     this.items.forEach((item: Item, index) => {

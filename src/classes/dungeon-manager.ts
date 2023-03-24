@@ -19,7 +19,7 @@ class DungeonManager {
   output: string[] = [];
 
   addPlayer() {
-    this.player = new Hero();
+    this.player = new Hero(15, 15);
   }
 
   isWalkableTile(position: Position) {
